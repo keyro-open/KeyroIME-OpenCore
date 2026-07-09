@@ -1,0 +1,51 @@
+===============================================================================
+ KeyroIME (キーロ) OpenCore v1.0
+ オープンソースコミュニティ版 著作権およびライセンス通知
+===============================================================================
+
+Copyright (C) 2024-2026 Localpro株式会社 (Localpro Co., Ltd.).
+All rights reserved.
+
+ブランド公式サイト: https://keyro.jp
+企業公式サイト: https://localpro.jp
+
+本ソフトウェアの OpenCore 版に含まれる中核モデル、C++17 TSF シェルの
+ソースコード、Rust 製コアアルゴリズムエンジン、およびそれらに実質的に
+依拠する派生物は、GNU General Public License version 3 (GPL v3) の条件に
+基づいて提供されます。
+
+【中核ライセンス条件および商用利用に関する重要な通知】
+
+1. コミュニティでの無料利用
+   個人ユーザー、開発者、教育機関および研究機関は、GPL v3 の条件を遵守
+   する限り、本入力法の中核コードを無料でダウンロード、調査、改変、
+   再配布できます。
+
+2. 派生物の公開義務
+   本 OpenCore 版の中核コードを基に二次開発、拡張、組み込み、または統合を
+   行った派生ソフトウェアは、同じく GPL v3 に基づき、対応する完全なソース
+   コードを公開する必要があります。
+
+3. 商用目的での利用制限およびデュアルライセンスの案内
+   - 本 OpenCore 版を、クローズドソースの商用収益活動に使用することは
+     許可されていません。これには、販売用パッケージ化、広告組み込み、
+     企業専用の非公開ツールとしての配布、専有ソフトウェア内コンポーネント
+     としての利用などが含まれます。
+   - Localpro株式会社の明示的な許諾を得ずに行われるクローズドソースの
+     商用包装、再配布、または実質的な収益化行為は、GPL v3 の条件および
+     著作権法に対する重大な侵害となる可能性があります。
+   - 企業、プロジェクト、または業務用途において GPL v3 の公開義務を外した
+     商用導入、カスタマイズ、高性能版または AI 高性能 Pro 版の利用を希望
+     する場合は、Localpro株式会社に連絡し、商用専有ライセンスを取得して
+     ください。
+
+===============================================================================
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+===============================================================================

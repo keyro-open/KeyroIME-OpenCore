@@ -1,0 +1,24 @@
+// Copyright (C) 2025-2026 Localpro株式会社 (Localpro Co., Ltd.). All rights reserved.
+// Brand Official Website: https://keyro.jp
+//
+// This file is part of KeyroIME (キーロ) v1.0 OpenCore.
+// KeyroIME is free software: you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by the Free Software Foundation.
+//
+// For commercial use licensing, custom deployment, or proprietary integrations,
+// please contact Localpro株式会社 via https://localpro.jp. Unauthorized closed-source
+// commercial exploitation is strictly prohibited.
+#pragma once
+
+#include <windows.h>
+
+#include <string>
+
+namespace KeyroIME {
+
+std::wstring ConvertRomajiBufferToHiragana(const std::string& input);
+std::wstring BuildLocalFallbackCommit(const std::string& input);
+bool RemoveLastRomajiUnit(std::string& input);
+bool IsRomajiLongVowelKey(WPARAM wParam, LPARAM lParam, bool shiftPressed);
+
+} // namespace KeyroIME

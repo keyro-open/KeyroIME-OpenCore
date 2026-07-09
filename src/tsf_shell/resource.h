@@ -1,0 +1,13 @@
+// Copyright (C) 2025-2026 Localpro株式会社 (Localpro Co., Ltd.). All rights reserved.
+// Brand Official Website: https://keyro.jp
+//
+// This file is part of KeyroIME (キーロ) v1.0 OpenCore.
+// KeyroIME is free software: you can redistribute it and/or modify it under
+// the terms of the GNU General Public License as published by the Free Software Foundation.
+//
+// For commercial use licensing, custom deployment, or proprietary integrations,
+// please contact Localpro株式会社 via https://localpro.jp. Unauthorized closed-source
+// commercial exploitation is strictly prohibited.
+#pragma once
+
+#define IDI_KEYROIME 101

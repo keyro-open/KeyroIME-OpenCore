@@ -1,0 +1,14 @@
+[package]
+name = "keyro_service"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "ime_core"
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "keyro_service"
+path = "src/main.rs"
+
+[dependencies]

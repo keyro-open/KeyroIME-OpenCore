@@ -1,0 +1,59 @@
+# KeyroIME OpenCore Development Rules
+
+## Role
+
+Act as a Windows software architect, TSF/IME engineer, and Rust/C++ systems engineer.
+
+This repository is the public OpenCore baseline for KeyroIME:
+
+```text
+https://github.com/keyro-open/KeyroIME-OpenCore.git
+```
+
+Use Japanese or English for repository files, comments, commit messages, and handoff notes.
+Do not add Chinese text to this public repository.
+
+## Public Repository Boundary
+
+- Keep this repository limited to the public OpenCore product baseline.
+- Do not add closed-source ranking logic, enterprise encrypted dictionary payloads, private SLM models, customer assets, credentials, or commercial installer secrets.
+- Do not mention private repository names, private GitHub organizations, or local machine paths in tracked files.
+- Generic commercial or proprietary boundaries may be described without exposing private repository locations.
+
+## Handoff Order
+
+1. Read `PROJECT_HANDOFF.md`.
+2. Read `doc/PROJECT_HANDOFF.md`, `doc/OPENCORE_ARCHITECTURE.md`, and `doc/REPOSITORY_POLICY.md` when more context is needed.
+3. Read only the task-relevant files.
+4. Do not load complete TSV dictionary files into conversation context unless the task explicitly requires dictionary import, dictionary audit, or release build validation.
+
+## Dictionary Context Control
+
+Restricted file range:
+
+```text
+src/keyro_service/assets/*.tsv
+src/keyro_service/assets/*.json
+```
+
+Rules:
+
+- Prefer `dictionary_manifest.json`, file sizes, row counts, small samples, or exact-match searches.
+- When checking examples, read at most 20 to 50 rows.
+- For specific entries, use exact search.
+- Representative automated inputs include `qスケジュール`, `qschedule`, `insuto-ru`, `tu`, `tsuka`, `shouchi`, `shiyousho`, and `キーロ`.
+
+## Code Constraints
+
+- The TSF DLL must not load Rust, full dictionaries, network components, or AI runtimes inside host processes.
+- TSF callbacks must not hold COM locks while waiting on slow IPC, and must not access `ITfContext` directly from the wrong thread.
+- The Rust service uses `\\.\pipe\KeyroIME.Service.v1`; do not replace the compact protocol with JSON without an explicit protocol migration.
+- When the service is unavailable, the C++ layer must keep local romaji-to-kana and English fallback behavior.
+- C++/Rust FFI boundaries must define pointer ownership and release rules explicitly.
+
+## Git and Release Constraints
+
+- Do not commit `release/`, `dist/`, `target/`, `build/`, binaries, logs, certificates, keys, credentials, or local path files.
+- Do not use destructive Git commands to discard user changes.
+- Before committing, run `git status --short --branch` and `git diff --check`.
+- Before pushing, perform a read-only remote check.

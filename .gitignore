@@ -1,0 +1,62 @@
+node_modules/
+.venv/
+venv/
+.vscode/
+*.log
+dist/
+.next/
+.env
+.env.*
+
+# Rust build output
+/target/
+Cargo.lock
+
+# C++ / MSBuild / Visual Studio build output
+.vs/
+/release/
+**/build/
+/x64/
+/x86/
+/Debug/
+/Release/
+*.obj
+*.pdb
+*.ilk
+*.exe
+*.dll
+*.lib
+*.suo
+*.user
+*.bat
+!build_release.bat
+!build_sandbox.bat
+!install.bat
+*.pyc
+__pycache__/
+
+# Local-only resources
+*.png
+*.drawio
+path.txt
+
+# Dictionary context control:
+# Tracked sample TSV assets stay in source control.
+# Full dictionaries, raw crawls, generated intermediates, and large test corpora must stay local.
+local_dictionaries/
+dictionary_dumps/
+src/keyro_service/assets/local/
+src/keyro_service/assets/full/
+src/keyro_service/assets/tmp/
+src/keyro_service/assets/*.full.tsv
+src/keyro_service/assets/*.dump.tsv
+src/keyro_service/assets/*_raw.tsv
+src/keyro_service/assets/*_generated.tsv
+
+*.pem
+*.key
+*.pfx
+*.p12
+credentials*
+secrets*
+.git

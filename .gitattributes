@@ -1,0 +1,21 @@
+* text=auto
+
+.gitattributes text eol=lf
+*.rs text eol=lf
+*.cpp text eol=lf
+*.h text eol=lf
+*.hpp text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.tsv text eol=lf
+*.py text eol=lf
+*.def text eol=crlf
+*.rc text eol=crlf
+*.bat text eol=crlf
+
+*.ico binary
+*.png binary
+*.dll binary
+*.exe binary
+*.pdb binary

@@ -1,0 +1,49 @@
+{
+  "generated_on": "2026-06-28",
+  "asset_profile": "development_sample",
+  "license": "CC BY-SA 4.0 plus KeyroIME project-authored supplements",
+  "sources": {
+    "JMdict_e.gz": "65a52f037d95c9bd0a1954d74825c06d5392626b71630ead431937d6e2c26adf",
+    "JMnedict.xml.gz": "56a8138c37a2ee521b1894ca6a64fcbfca62c0752b5b437c5bb0dfdf96d96fea"
+  },
+  "counts": {
+    "system": 360,
+    "frequent": 220,
+    "names": 220,
+    "places": 240,
+    "translations": 360,
+    "katakana": 870
+  },
+  "curated_supplements": {
+    "added_on": "2026-06-28",
+    "license": "Project-authored and user-provided local KeyroIME dictionary supplements",
+    "counts": {
+      "system": 1567,
+      "names": 3,
+      "places": 4,
+      "translations": 8
+    }
+  },
+  "effective_counts": {
+    "system": 1927,
+    "frequent": 220,
+    "names": 223,
+    "places": 244,
+    "translations": 368,
+    "katakana": 870
+  },
+  "local_dictionary_imports": [
+    {
+      "imported_on": "2026-06-28",
+      "source": "external local source file",
+      "note": "Column 1 category and column 4 priority are used only as import/ranking hints; they are not displayed as candidates.",
+      "source_rows": 1441,
+      "duplicates_or_invalid_skipped": 1195,
+      "imported_rows": {
+        "system_supplement.tsv": 187,
+        "katakana.tsv": 59
+      }
+    }
+  ],
+  "profile_note": "development_sample keeps only representative rows for tests and development"
+}

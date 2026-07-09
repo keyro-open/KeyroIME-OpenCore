@@ -1,0 +1,28 @@
+KeyroIME OpenCore License
+
+Copyright (c) 2026 Localpro株式会社. All rights reserved.
+
+KeyroIME OpenCore source code is licensed under the GNU General Public License
+version 3 only (GPL-3.0-only), except where a separate file-level license or
+third-party notice explicitly applies.
+
+You may use, study, modify, and redistribute the GPL-covered OpenCore source
+code under the terms of GPL v3. If you distribute modified or unmodified
+GPL-covered binaries, you must comply with GPL v3 source-code, license, and
+notice obligations.
+
+The KeyroIME name, キーロ name, keyro.jp brand, Localpro株式会社 name, logos,
+icons, product identifiers, and trademarks are not licensed for misleading
+endorsement, rebranding, or unrelated commercial use.
+
+This OpenCore repository must not include closed-source commercial ranking
+logic, enterprise encrypted dictionary payloads, private SLM models, customer
+assets, credentials, or commercial installer secrets.
+
+Third-party dictionary data, metadata, and derived resources remain governed by
+their own licenses and attribution requirements. See THIRD_PARTY_NOTICES.md and
+src/keyro_service/assets/dictionary_manifest.json for known notices.
+
+The software and materials are provided "as is", without warranty of any kind,
+express or implied, including but not limited to warranties of merchantability,
+fitness for a particular purpose, non-infringement, availability, or accuracy.

@@ -1,0 +1,52 @@
+===============================================================================
+ KeyroIME (Kiiro) OpenCore v1.0
+ Open Source Community Edition Copyright and License Notice
+===============================================================================
+
+Copyright (C) 2024-2026 Localpro Co., Ltd.
+All rights reserved.
+
+Brand website: https://keyro.jp
+Company website: https://localpro.jp
+
+The core model of this OpenCore edition, including but not limited to the
+C++17 TSF shell source code, the Rust core algorithm engine, and derivative
+works that substantially rely on those components, is provided under the
+GNU General Public License version 3 (GPL v3).
+
+Core Licensing Terms and Commercial-Use Notice
+
+1. Free community use
+   Individual users, developers, educational institutions, and research
+   organizations may download, study, modify, and redistribute the core code
+   of this input method free of charge, provided that they comply with GPL v3.
+
+2. Source disclosure for derivatives
+   Any derivative software that is developed, extended, embedded, or integrated
+   based on this OpenCore core code must remain open source and must release
+   the complete corresponding source code under GPL v3.
+
+3. Commercial-use restriction and dual-license notice
+   - This OpenCore edition may not be used for closed-source commercial profit
+     activities, including but not limited to packaged resale, bundled
+     advertising, distribution as a company-private non-open-source tool, or
+     use as a built-in component of proprietary software.
+   - Closed-source commercial packaging, redistribution, or indirect
+     monetization without explicit authorization from Localpro Co., Ltd. may
+     constitute a serious violation of GPL v3 terms and copyright law.
+   - If your company, project, or business scenario requires commercial
+     deployment, customization, removal of GPL v3 source-disclosure
+     obligations, or access to a high-performance / AI high-performance Pro
+     edition, you must contact Localpro Co., Ltd. to obtain a proprietary
+     commercial license.
+
+===============================================================================
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+===============================================================================
