@@ -1,4 +1,4 @@
-// Copyright (C) 2025-2026 Localpro株式会社 (Localpro Co., Ltd.). All rights reserved.
+// Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 // Brand Official Website: https://keyro.jp
 //
 // This file is part of KeyroIME (キーロ) v1.0 OpenCore.
@@ -6,7 +6,7 @@
 // the terms of the GNU General Public License as published by the Free Software Foundation.
 //
 // For commercial use licensing, custom deployment, or proprietary integrations,
-// please contact Localpro株式会社 via https://localpro.jp. Unauthorized closed-source
+// please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
 // commercial exploitation is strictly prohibited.
 use std::collections::HashSet;
 
@@ -22,6 +22,8 @@ const KEYRO_HELP_PAGE: [&str; PAGE_SIZE] = [
     "入力モード: Alt+~ / 文字幅: Shift+Caps",
     "句読点: Shift / 配列: Alt+;",
 ];
+const USER_EXACT_MATCH_BOOST: u32 = 24_000;
+const USER_SOURCE_BOOST: u32 = 30_000;
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub enum DictMode {
@@ -120,7 +122,7 @@ fn rank_all(input: &str) -> Vec<String> {
         }
     };
 
-    raw_candidates.sort_by(|a, b| weighted_score(b, mode).cmp(&weighted_score(a, mode)));
+    sort_ranked_candidates(&mut raw_candidates, mode);
     let mut seen_surfaces = HashSet::new();
     raw_candidates.retain(|candidate| {
         candidate.text.is_empty() || seen_surfaces.insert(candidate.text.clone())
@@ -197,7 +199,8 @@ fn inject_keyro_help_page(candidates: Vec<String>) -> Vec<String> {
 fn weighted_score(candidate: &RawCandidate, mode: DictMode) -> u32 {
     let match_boost = match candidate.match_kind {
         RankedMatch::Exact => match candidate.source {
-            CandidateSource::User | CandidateSource::System => 20_000,
+            CandidateSource::User => USER_EXACT_MATCH_BOOST,
+            CandidateSource::System => 20_000,
             CandidateSource::Translation
             | CandidateSource::Name
             | CandidateSource::Place
@@ -210,7 +213,7 @@ fn weighted_score(candidate: &RawCandidate, mode: DictMode) -> u32 {
         RankedMatch::Fallback => 0,
     };
     let source_boost = match candidate.source {
-        CandidateSource::User => 20_000,
+        CandidateSource::User => USER_SOURCE_BOOST,
         CandidateSource::Translation => {
             if mode == DictMode::QPrefix {
                 5_000
@@ -231,6 +234,37 @@ fn weighted_score(candidate: &RawCandidate, mode: DictMode) -> u32 {
         .base_score
         .saturating_add(match_boost)
         .saturating_add(source_boost)
+}
+
+fn sort_ranked_candidates(candidates: &mut [RawCandidate], mode: DictMode) {
+    candidates.sort_by(|left, right| {
+        weighted_score(right, mode)
+            .cmp(&weighted_score(left, mode))
+            .then_with(|| source_priority(right.source).cmp(&source_priority(left.source)))
+            .then_with(|| match_priority(right.match_kind).cmp(&match_priority(left.match_kind)))
+            .then_with(|| right.base_score.cmp(&left.base_score))
+            .then_with(|| left.text.cmp(&right.text))
+    });
+}
+
+fn source_priority(source: CandidateSource) -> u8 {
+    match source {
+        CandidateSource::User => 6,
+        CandidateSource::Name | CandidateSource::Place | CandidateSource::Station => 5,
+        CandidateSource::Translation => 4,
+        CandidateSource::System => 3,
+        CandidateSource::Generated => 2,
+    }
+}
+
+fn match_priority(match_kind: RankedMatch) -> u8 {
+    match match_kind {
+        RankedMatch::Exact => 5,
+        RankedMatch::Prefix => 4,
+        RankedMatch::Middle => 3,
+        RankedMatch::Generated => 2,
+        RankedMatch::Fallback => 1,
+    }
 }
 
 fn translation_candidates(query: &str, kana: &str) -> Vec<RawCandidate> {
@@ -657,6 +691,26 @@ mod tests {
             exact < prefix || prefix == 0,
             "learned user selections may outrank the static exact candidate"
         );
+    }
+
+    #[test]
+    fn user_prediction_outranks_static_exact_candidate() {
+        let mut candidates = vec![
+            raw(
+                "静的候補",
+                4_000,
+                CandidateSource::System,
+                RankedMatch::Exact,
+            ),
+            raw(
+                "ユーザー候補",
+                2_000,
+                CandidateSource::User,
+                RankedMatch::Prefix,
+            ),
+        ];
+        sort_ranked_candidates(&mut candidates, DictMode::Normal);
+        assert_eq!(candidates[0].text, "ユーザー候補");
     }
 
     #[test]

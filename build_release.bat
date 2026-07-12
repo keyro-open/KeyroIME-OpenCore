@@ -41,7 +41,7 @@ if errorlevel 1 (
 )
 
 echo Building the TSF shell and smoke tests...
-cmake --build "%TSF_BUILD_DIR%" --config Release --target KeyroIME keyro_tray keyro_tray_menu_smoke keyro_runtime_input_smoke keyro_ipc_bench keyro_ipc_failover_smoke keyro_tsf_activation_smoke keyro_local_fallback_smoke tsf_core
+cmake --build "%TSF_BUILD_DIR%" --config Release --target KeyroIME keyro_tray keyro_tray_menu_smoke keyro_runtime_input_smoke keyro_ipc_bench keyro_ipc_failover_smoke keyro_tsf_activation_smoke keyro_local_fallback_smoke keyro_candidate_tag_smoke tsf_core
 if errorlevel 1 (
     echo TSF shell build failed.
     exit /b 1
@@ -58,6 +58,20 @@ echo Running local fallback smoke test...
 "%TSF_BUILD_DIR%\Release\keyro_local_fallback_smoke.exe"
 if !ERRORLEVEL! NEQ 0 (
     echo Local fallback smoke test failed with exit code !ERRORLEVEL!.
+    exit /b 1
+)
+
+echo Running candidate tag smoke test...
+"%TSF_BUILD_DIR%\Release\keyro_candidate_tag_smoke.exe"
+if !ERRORLEVEL! NEQ 0 (
+    echo Candidate tag smoke test failed with exit code !ERRORLEVEL!.
+    exit /b 1
+)
+
+echo Running runtime input smoke test...
+"%TSF_BUILD_DIR%\Release\keyro_runtime_input_smoke.exe"
+if !ERRORLEVEL! NEQ 0 (
+    echo Runtime input smoke test failed with exit code !ERRORLEVEL!.
     exit /b 1
 )
 

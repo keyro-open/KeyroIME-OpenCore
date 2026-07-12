@@ -1,4 +1,4 @@
-// Copyright (C) 2025-2026 Localpro株式会社 (Localpro Co., Ltd.). All rights reserved.
+// Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 // Brand Official Website: https://keyro.jp
 //
 // This file is part of KeyroIME (キーロ) v1.0 OpenCore.
@@ -6,7 +6,7 @@
 // the terms of the GNU General Public License as published by the Free Software Foundation.
 //
 // For commercial use licensing, custom deployment, or proprietary integrations,
-// please contact Localpro株式会社 via https://localpro.jp. Unauthorized closed-source
+// please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
 // commercial exploitation is strictly prohibited.
 // tip_guid.cpp
 

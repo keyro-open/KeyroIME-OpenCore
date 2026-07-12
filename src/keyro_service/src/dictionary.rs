@@ -1,4 +1,4 @@
-// Copyright (C) 2025-2026 Localpro株式会社 (Localpro Co., Ltd.). All rights reserved.
+// Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 // Brand Official Website: https://keyro.jp
 //
 // This file is part of KeyroIME (キーロ) v1.0 OpenCore.
@@ -6,7 +6,7 @@
 // the terms of the GNU General Public License as published by the Free Software Foundation.
 //
 // For commercial use licensing, custom deployment, or proprietary integrations,
-// please contact Localpro株式会社 via https://localpro.jp. Unauthorized closed-source
+// please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
 // commercial exploitation is strictly prohibited.
 use std::collections::{HashMap, HashSet};
 use std::env;
@@ -46,6 +46,9 @@ const MAX_PREFIX_PREDICTIVE_CANDIDATES: usize = 8;
 const MAX_CONCATENATED_CANDIDATES: usize = 24;
 const MAX_CONCATENATION_PARTS: usize = 3;
 const MAX_FRAGMENT_POSTINGS: usize = 1024;
+const MAX_USER_PREDICTIVE_CANDIDATES: usize = 24;
+const USER_BASE_SCORE: u32 = 30_000;
+const USER_FREQUENCY_STEP: u32 = 200;
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub enum DictionaryKind {
@@ -110,6 +113,7 @@ struct SurfaceIndex {
 #[derive(Default)]
 struct UserDictionary {
     entries: HashMap<String, HashMap<String, u32>>,
+    predictive: PredictiveIndex,
 }
 
 enum NonKanaPredictiveMode {
@@ -133,15 +137,21 @@ pub fn system_candidates(reading: &str) -> Vec<DictionaryCandidate> {
 
 pub fn predictive_candidates(reading: &str) -> Vec<DictionaryCandidate> {
     let reading = normalize_kana_reading(reading);
-    if reading.is_empty() || reading.chars().any(|character| character.is_ascii()) {
+    if reading.is_empty() {
         return Vec::new();
     }
 
-    predictive_candidates_from_index(
-        &static_dictionaries().predictive,
-        &reading,
-        NonKanaPredictiveMode::SurfaceText,
-    )
+    let mut result = user_predictive_candidates(&reading);
+    if !reading.chars().any(|character| character.is_ascii()) {
+        result.extend(predictive_candidates_from_index(
+            &static_dictionaries().predictive,
+            &reading,
+            NonKanaPredictiveMode::SurfaceText,
+        ));
+    }
+    sort_by_match_then_score(&mut result);
+    result.truncate(MAX_PREDICTIVE_CANDIDATES);
+    result
 }
 
 pub fn concatenated_candidates(reading: &str) -> Vec<DictionaryCandidate> {
@@ -260,14 +270,18 @@ fn increment_user_frequency(reading: &str, text: &str) -> u32 {
     let mut dictionary = user_dictionary()
         .write()
         .unwrap_or_else(|poisoned| poisoned.into_inner());
-    let frequency = dictionary
-        .entries
-        .entry(reading.to_string())
-        .or_default()
-        .entry(text.to_string())
-        .or_default();
-    *frequency = frequency.saturating_add(1);
-    *frequency
+    let updated_frequency = {
+        let frequency = dictionary
+            .entries
+            .entry(reading.to_string())
+            .or_default()
+            .entry(text.to_string())
+            .or_default();
+        *frequency = frequency.saturating_add(1);
+        *frequency
+    };
+    rebuild_user_predictive_index(&mut dictionary);
+    updated_frequency
 }
 
 pub fn record_legacy_frequency(value: &str) {
@@ -435,7 +449,7 @@ fn user_candidates(reading: &str) -> Vec<DictionaryCandidate> {
                 .iter()
                 .map(|(text, frequency)| DictionaryCandidate {
                     text: text.clone(),
-                    score: 20_000_u32.saturating_add(frequency.saturating_mul(100)),
+                    score: user_score(*frequency),
                     kind: DictionaryKind::User,
                     match_kind: CandidateMatch::Exact,
                 })
@@ -444,6 +458,43 @@ fn user_candidates(reading: &str) -> Vec<DictionaryCandidate> {
         .unwrap_or_default();
     result.sort_by(|left, right| right.score.cmp(&left.score));
     result
+}
+
+fn user_predictive_candidates(query: &str) -> Vec<DictionaryCandidate> {
+    let dictionary = user_dictionary()
+        .read()
+        .unwrap_or_else(|poisoned| poisoned.into_inner());
+    let mut result = predictive_candidates_from_index(
+        &dictionary.predictive,
+        query,
+        NonKanaPredictiveMode::SurfaceText,
+    );
+    result.truncate(MAX_USER_PREDICTIVE_CANDIDATES);
+    result
+}
+
+fn user_score(frequency: u32) -> u32 {
+    USER_BASE_SCORE.saturating_add(frequency.saturating_mul(USER_FREQUENCY_STEP))
+}
+
+fn rebuild_user_predictive_index(dictionary: &mut UserDictionary) {
+    let candidates = dictionary
+        .entries
+        .iter()
+        .map(|(reading, entries)| {
+            let candidates = entries
+                .iter()
+                .map(|(text, frequency)| DictionaryCandidate {
+                    text: text.clone(),
+                    score: user_score(*frequency),
+                    kind: DictionaryKind::User,
+                    match_kind: CandidateMatch::Exact,
+                })
+                .collect::<Vec<_>>();
+            (reading.clone(), candidates)
+        })
+        .collect::<HashMap<_, _>>();
+    dictionary.predictive = build_predictive_index(&[&candidates], &[&candidates]);
 }
 
 fn load_user_wal() -> UserDictionary {
@@ -468,6 +519,7 @@ fn load_user_wal() -> UserDictionary {
             .or_default();
         *frequency = frequency.saturating_add(delta);
     }
+    rebuild_user_predictive_index(&mut dictionary);
     dictionary
 }
 
@@ -1053,7 +1105,31 @@ mod tests {
             .find(|item| item.text == text)
             .expect("dynamic candidate should be returned");
         assert_eq!(candidate.kind, DictionaryKind::User);
-        assert_eq!(candidate.score, 20_000 + second * 100);
+        assert_eq!(
+            candidate.score,
+            USER_BASE_SCORE + second * USER_FREQUENCY_STEP
+        );
+    }
+
+    #[test]
+    fn user_candidates_participate_in_reading_and_surface_prediction() {
+        let reading = "ゆーざーれんそうしけん";
+        let text = "利用者連想試験";
+        increment_user_frequency(reading, text);
+
+        let reading_prediction = predictive_candidates("ゆーざーれん")
+            .into_iter()
+            .find(|candidate| candidate.text == text)
+            .expect("user reading prediction should be returned");
+        assert_eq!(reading_prediction.kind, DictionaryKind::User);
+        assert_eq!(reading_prediction.match_kind, CandidateMatch::Prefix);
+
+        let surface_prediction = predictive_candidates("利用者")
+            .into_iter()
+            .find(|candidate| candidate.text == text)
+            .expect("user surface prediction should be returned");
+        assert_eq!(surface_prediction.kind, DictionaryKind::User);
+        assert_eq!(surface_prediction.match_kind, CandidateMatch::Prefix);
     }
 
     #[test]
@@ -1127,8 +1203,15 @@ mod tests {
     }
 
     #[test]
-    fn predictive_lookup_prioritizes_prefix_before_middle_matches() {
-        let candidates = predictive_candidates("つか");
+    fn static_predictive_lookup_prioritizes_prefix_before_middle_matches() {
+        let static_predictions = |query| {
+            predictive_candidates_from_index(
+                &static_dictionaries().predictive,
+                query,
+                NonKanaPredictiveMode::SurfaceText,
+            )
+        };
+        let candidates = static_predictions("つか");
         let position = |text: &str| {
             candidates
                 .iter()
@@ -1142,7 +1225,7 @@ mod tests {
         assert!(candidates.iter().any(|item| item.text == "使い"));
         assert!(candidates.iter().any(|item| item.text == "疲れ"));
 
-        let acknowledgement = predictive_candidates("しょうち");
+        let acknowledgement = static_predictions("しょうち");
         assert!(acknowledgement
             .iter()
             .any(|item| item.text == "承知しました"));

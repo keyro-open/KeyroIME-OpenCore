@@ -1,6 +1,6 @@
 # KeyroIME OpenCore Project Handoff
 
-Snapshot date: 2026-07-09 (Asia/Tokyo)
+Snapshot date: 2026-07-12 (Asia/Tokyo)
 
 ## Repository
 
@@ -33,9 +33,16 @@ Do not add:
 
 ## Validation Baseline
 
-- Rust release tests: 52 passed.
+- Rust release tests: 54 passed.
 - `git diff --check`: required before commit.
 - Full release validation should run `build_release.bat` when preparing a release or changing TSF/IPC behavior.
+- `build_release.bat` runs TSF activation, local fallback, candidate tag normalization, runtime input, tray menu, and IPC failover smoke tests.
+
+## Current Candidate Behavior
+
+- User-learned entries are indexed for reading and surface prediction and receive the highest source priority during ranking.
+- Static prefix predictions remain ahead of static middle matches; deterministic tie-breaking uses source, match type, base score, and surface text.
+- Name, place, and station candidates retain their source types, while the candidate window presents the unified `名` tag.
 
 ## Next Work
 

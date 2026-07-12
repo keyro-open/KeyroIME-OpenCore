@@ -1,4 +1,4 @@
-// Copyright (C) 2025-2026 Localpro株式会社 (Localpro Co., Ltd.). All rights reserved.
+// Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 // Brand Official Website: https://keyro.jp
 //
 // This file is part of KeyroIME (キーロ) v1.0 OpenCore.
@@ -6,7 +6,7 @@
 // the terms of the GNU General Public License as published by the Free Software Foundation.
 //
 // For commercial use licensing, custom deployment, or proprietary integrations,
-// please contact Localpro株式会社 via https://localpro.jp. Unauthorized closed-source
+// please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
 // commercial exploitation is strictly prohibited.
 /// ImeStateMachine 日本語入力コア状態マシン
 /// Empty、Composing、DeepNavigating の3状態遷移を管理します。
@@ -415,11 +415,11 @@ impl ImeStateMachine {
                 self.candidates_pool.push("系統詞1".to_string());
             }
             PrefixMode::VPrefix => {
-                // v モード: 先頭4件に固有名詞を挿入します（タグは [人]/[地]/[駅] に簡略化）。
-                self.candidates_pool.push("[人] 大塚愛".to_string());
-                self.candidates_pool.push("[地] 大塚駅".to_string());
-                self.candidates_pool.push("[地] 大塚".to_string());
-                self.candidates_pool.push("[駅] Ōtsuka".to_string());
+                // v モード: 先頭4件に固有名詞を挿入し、表示タグを [名] に統一します。
+                self.candidates_pool.push("[名] 大塚愛".to_string());
+                self.candidates_pool.push("[名] 大塚駅".to_string());
+                self.candidates_pool.push("[名] 大塚".to_string());
+                self.candidates_pool.push("[名] Ōtsuka".to_string());
                 self.candidates_pool.push(self.kana_buffer.clone());
             }
             PrefixMode::Normal => {
