@@ -2,7 +2,9 @@
 
 Type Japanese without breaking your flow.
 
-KeyroIME OpenCore is a local-first Japanese input method editor for Windows x64. It keeps kana/kanji conversion, katakana loanwords, half-width numbers and symbols, English fallback, and JIS/ANSI keyboard switching close to the keys your fingers already know.
+KeyroIME OpenCore is a local-first Japanese input method editor for Windows x64. It keeps kana/kanji conversion, katakana loanwords, half-width numbers and symbols, English input, and JIS/ANSI keyboard switching close to the keys your fingers already know.
+
+Japanese writing rarely stays in one character set. A single email or technical note may contain names, dates, prices, model numbers, URLs, commands, and English terminology. KeyroIME brings those transitions into one continuous workflow so you can spend less time correcting modes and more time finishing the sentence.
 
 Official public repository:
 
@@ -15,15 +17,17 @@ README:
 - [日本語](README.ja.md)
 - [English](README.en.md)
 
-Core product highlights:
+Designed for everyday mixed input:
 
-- Fast Japanese input for Windows users who mix Japanese, numbers, symbols, and English throughout the day.
+- Continuous Japanese input for Windows users who mix Japanese, numbers, symbols, and English throughout the day.
 - Default half-width input for Japanese/English mixed writing.
 - One-key number and symbol entry without candidate selection or waiting.
 - ANSI/JIS physical keyboard switching for Japanese and US keyboard environments.
 - `CapsLock` English upper/lowercase lock, `Shift+CapsLock` width switching, Shift punctuation switching, `v` names/places/stations, and `q` translation shortcuts.
 - Katakana loanword matching, fuzzy prediction from one kana/kanji, and dynamic candidate concatenation for uncommon names and places.
-- Local-first Windows architecture: C++17 TSF shell, Rust dictionary service, tray UI, and no cloud or AI dependency in v1.0.
+- Local-first Windows architecture: C++17 TSF shell, Rust dictionary service, tray UI, and no account, cloud, or AI dependency in v1.0.
+
+KeyroIME is intended for business documents, software development, technical writing, and international workplaces where Japanese and US keyboard environments coexist. Dictionary lookup and candidate generation stay on the Windows PC, while the TSF layer retains local romaji-to-kana fallback when the service is unavailable.
 
 This repository intentionally excludes build outputs, release binaries, logs, local paths, credentials, generated caches, closed-source commercial logic, private models, customer assets, and commercial installer secrets.
 
