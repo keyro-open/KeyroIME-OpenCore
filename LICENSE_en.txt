@@ -3,7 +3,7 @@
  Open Source Community Edition Copyright and License Notice
 ===============================================================================
 
-Copyright (C) 2024-2026 Localpro Co., Ltd.
+Copyright (C) 2024-2026 LocalPro Co., Ltd.
 All rights reserved.
 
 Brand website: https://keyro.jp
@@ -32,12 +32,12 @@ Core Licensing Terms and Commercial-Use Notice
      advertising, distribution as a company-private non-open-source tool, or
      use as a built-in component of proprietary software.
    - Closed-source commercial packaging, redistribution, or indirect
-     monetization without explicit authorization from Localpro Co., Ltd. may
+     monetization without explicit authorization from LocalPro Co., Ltd. may
      constitute a serious violation of GPL v3 terms and copyright law.
    - If your company, project, or business scenario requires commercial
      deployment, customization, removal of GPL v3 source-disclosure
      obligations, or access to a high-performance / AI high-performance Pro
-     edition, you must contact Localpro Co., Ltd. to obtain a proprietary
+     edition, you must contact LocalPro Co., Ltd. to obtain a proprietary
      commercial license.
 
 ===============================================================================

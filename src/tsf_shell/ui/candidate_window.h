@@ -1,4 +1,4 @@
-// Copyright (C) 2025-2026 Localpro株式会社 (Localpro Co., Ltd.). All rights reserved.
+// Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 // Brand Official Website: https://keyro.jp
 //
 // This file is part of KeyroIME (キーロ) v1.0 OpenCore.
@@ -6,7 +6,7 @@
 // the terms of the GNU General Public License as published by the Free Software Foundation.
 //
 // For commercial use licensing, custom deployment, or proprietary integrations,
-// please contact Localpro株式会社 via https://localpro.jp. Unauthorized closed-source
+// please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
 // commercial exploitation is strictly prohibited.
 // candidate_window.h
 // KeyroIME TSF シェル - 純縦並び候補ウィンドウ
@@ -22,7 +22,7 @@ namespace KeyroIME {
 /// 候補項目構造体
 struct CandidateItem {
     std::wstring text;       // 候補テキスト（タグを含む）
-    bool has_tag;            // 簡略タグの有無（訳/地/人）
+    bool has_tag;            // 簡略タグの有無（訳/名）
     std::wstring tag;        // 右揃えの1文字タグ
     std::wstring content;    // 実際内容
 };

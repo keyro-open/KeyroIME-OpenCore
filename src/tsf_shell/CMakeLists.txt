@@ -1,4 +1,4 @@
-# Copyright (C) 2025-2026 Localpro株式会社 (Localpro Co., Ltd.). All rights reserved.
+# Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 # Brand Official Website: https://keyro.jp
 #
 # This file is part of KeyroIME (キーロ) v1.0 OpenCore.
@@ -6,7 +6,7 @@
 # the terms of the GNU General Public License as published by the Free Software Foundation.
 #
 # For commercial use licensing, custom deployment, or proprietary integrations,
-# please contact Localpro株式会社 via https://localpro.jp. Unauthorized closed-source
+# please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
 # commercial exploitation is strictly prohibited.
 cmake_minimum_required(VERSION 3.20)
 project(KeyroIME_TSF_Shell)
@@ -64,12 +64,14 @@ set(TSF_DLL_HEADERS
 
 # UI モジュールソースを追加します。
 set(UI_SOURCES
+    ui/candidate_tag.cpp
     ui/candidate_window.cpp
     ui/system_tray.cpp
     ui/status_osd.cpp
 )
 
 set(UI_HEADERS
+    ui/candidate_tag.h
     ui/candidate_window.h
     ui/system_tray.h
     ui/status_osd.h
@@ -171,6 +173,12 @@ add_executable(keyro_local_fallback_smoke
     tsf_core/local_romaji.h
 )
 
+add_executable(keyro_candidate_tag_smoke
+    candidate_tag_smoke.cpp
+    ui/candidate_tag.cpp
+    ui/candidate_tag.h
+)
+
 # 旧 PoC コンソールプログラムを追加します。
 add_executable(poc_console
     main.cpp
@@ -187,6 +195,8 @@ add_library(KeyroIME SHARED
     ${KEYRO_RESOURCE_SOURCES}
     ui/candidate_window.cpp
     ui/candidate_window.h
+    ui/candidate_tag.cpp
+    ui/candidate_tag.h
 )
 
 # 旧サンドボックス支援モジュールをビルドし、キーボード配列、Caps Lock、絶対パス FFI コードを継続検査します。
@@ -234,6 +244,10 @@ if(WIN32)
         WIN32_EXECUTABLE FALSE
     )
 
+    set_target_properties(keyro_candidate_tag_smoke PROPERTIES
+        WIN32_EXECUTABLE FALSE
+    )
+
     set_target_properties(keyro_tray_menu_smoke PROPERTIES
         WIN32_EXECUTABLE FALSE
     )
@@ -248,6 +262,7 @@ if(WIN32)
     target_link_libraries(keyro_tsf_activation_smoke PRIVATE Ole32 Uuid)
     target_link_libraries(keyro_runtime_input_smoke PRIVATE Ole32 Uuid User32 Advapi32)
     target_link_libraries(keyro_local_fallback_smoke PRIVATE)
+    target_link_libraries(keyro_candidate_tag_smoke PRIVATE)
     target_link_libraries(KeyroIME PRIVATE Ole32 Advapi32 Uuid)
 
     if(MSVC)
@@ -258,6 +273,7 @@ if(WIN32)
         target_compile_options(keyro_tsf_activation_smoke PRIVATE /utf-8)
         target_compile_options(keyro_runtime_input_smoke PRIVATE /utf-8)
         target_compile_options(keyro_local_fallback_smoke PRIVATE /utf-8)
+        target_compile_options(keyro_candidate_tag_smoke PRIVATE /utf-8)
         target_compile_options(keyro_tray PRIVATE /utf-8)
         target_compile_options(keyro_tray_menu_smoke PRIVATE /utf-8)
         target_compile_options(KeyroIME PRIVATE /utf-8)

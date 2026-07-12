@@ -6,7 +6,7 @@ This document defines the compatibility FFI contract between the experimental C+
 
 Version: v1.0
 Last updated: 2026-07-09
-Maintainer: Localpro株式会社
+Maintainer: 株式会社LocalPro
 
 The production TSF path uses the local named-pipe service protocol. These FFI exports are kept for compatibility experiments and smoke tests.
 

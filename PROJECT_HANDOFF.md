@@ -1,6 +1,6 @@
 # KeyroIME OpenCore Handoff
 
-Snapshot date: 2026-07-09 (Asia/Tokyo)
+Snapshot date: 2026-07-12 (Asia/Tokyo)
 
 ## Public Repository
 
@@ -24,7 +24,9 @@ Do not add closed-source commercial ranking logic, enterprise encrypted dictiona
 
 - Product version: `KeyroIME OpenCore v1.0.6.15`.
 - Default branch: `main`.
-- Primary capabilities: TSF composition/commit, candidate window, ANSI/JIS mapping, Shift/CapsLock behavior, tray menu, OSD, `q`/`v` source promotion, katakana loanwords, long-vowel handling, prediction, candidate concatenation, KeyroIME help candidate page, and local 14-day pseudo update reminder.
+- Primary capabilities: TSF composition/commit, candidate window, ANSI/JIS mapping, Shift/CapsLock behavior, tray menu, OSD, `q`/`v` source promotion, katakana loanwords, long-vowel handling, static and user-learned prediction, candidate concatenation, KeyroIME help candidate page, and local 14-day pseudo update reminder.
+- User-learned candidates use a dedicated predictive index and the highest ranking source priority. Name, place, and station source tags retain their internal meaning while the candidate window displays the unified `名` tag.
+- The legal company name is `株式会社LocalPro` in Japanese and `LocalPro Co., Ltd.` in English.
 
 ## Documentation Entry Points
 
@@ -37,9 +39,10 @@ Do not add closed-source commercial ranking logic, enterprise encrypted dictiona
 
 ## Validation Baseline
 
-- Rust release tests: 52 passed.
+- Rust release tests: 54 passed.
 - Full release build: expected to build Rust service, C++ TSF DLL, tray process, and smoke-test utilities.
-- Required smoke tests: TSF activation, local fallback, tray menu, and IPC failover.
+- Required smoke tests: TSF activation, local fallback, candidate tag normalization, runtime input, tray menu, and IPC failover.
+- Last full release validation: passed on 2026-07-12 with full dictionary assets; IPC failover remained below the 10 ms target.
 
 ## Release Notes
 

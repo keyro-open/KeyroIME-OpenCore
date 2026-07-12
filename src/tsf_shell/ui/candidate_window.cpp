@@ -1,4 +1,4 @@
-// Copyright (C) 2025-2026 Localpro株式会社 (Localpro Co., Ltd.). All rights reserved.
+// Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 // Brand Official Website: https://keyro.jp
 //
 // This file is part of KeyroIME (キーロ) v1.0 OpenCore.
@@ -6,12 +6,13 @@
 // the terms of the GNU General Public License as published by the Free Software Foundation.
 //
 // For commercial use licensing, custom deployment, or proprietary integrations,
-// please contact Localpro株式会社 via https://localpro.jp. Unauthorized closed-source
+// please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
 // commercial exploitation is strictly prohibited.
 // candidate_window.cpp
 // KeyroIME TSF シェル - 純縦並び候補ウィンドウ実装
 
 #include "candidate_window.h"
+#include "candidate_tag.h"
 
 #include <algorithm>
 #include <sstream>
@@ -193,19 +194,12 @@ CandidateItem CandidateWindow::ParseCandidate(const std::wstring& candidate)
     item.text = candidate;
     item.has_tag = false;
 
-    // コア層の旧タグを右側の1文字タグへ統一します。
+    // コア層の候補種別を右側の1文字タグへ統一します。
     if (candidate.length() > 2 && candidate[0] == L'[') {
         size_t endBracket = candidate.find(L']');
         if (endBracket != std::wstring::npos) {
             std::wstring sourceTag = candidate.substr(1, endBracket - 1);
-            if (sourceTag == L"訳" || sourceTag == L"翻訳") {
-                item.tag = L"訳";
-            } else if (sourceTag == L"地" || sourceTag == L"地名" ||
-                       sourceTag == L"駅" || sourceTag == L"駅名") {
-                item.tag = L"地";
-            } else if (sourceTag == L"人" || sourceTag == L"人名") {
-                item.tag = L"人";
-            }
+            item.tag = NormalizeCandidateTag(sourceTag);
             item.has_tag = !item.tag.empty();
 
             // 実内容を抽出します（タグと空白をスキップ）。

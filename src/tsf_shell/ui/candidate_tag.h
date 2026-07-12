@@ -8,33 +8,14 @@
 // For commercial use licensing, custom deployment, or proprietary integrations,
 // please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
 // commercial exploitation is strictly prohibited.
-// class_factory.h
-// IClassFactory implementation for KeyroIME.dll.
 
 #pragma once
 
-#include <unknwn.h>
+#include <string>
 
 namespace KeyroIME {
 
-class KeyroClassFactory final : public IClassFactory {
-public:
-    KeyroClassFactory();
-    ~KeyroClassFactory();
-
-    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppvObject) override;
-    ULONG STDMETHODCALLTYPE AddRef() override;
-    ULONG STDMETHODCALLTYPE Release() override;
-
-    HRESULT STDMETHODCALLTYPE CreateInstance(
-        IUnknown* pUnkOuter,
-        REFIID riid,
-        void** ppvObject) override;
-
-    HRESULT STDMETHODCALLTYPE LockServer(BOOL fLock) override;
-
-private:
-    volatile LONG m_refCount;
-};
+/// コア候補の種別タグを候補ウィンドウ用の1文字タグへ正規化します。
+std::wstring NormalizeCandidateTag(const std::wstring& sourceTag);
 
 } // namespace KeyroIME
