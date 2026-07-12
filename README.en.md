@@ -12,21 +12,23 @@ Do not add closed-source ranking logic, encrypted enterprise dictionary payloads
 
 KeyroIME is a local-first Japanese input method editor for Windows x64. It is designed for people who write Japanese while constantly touching numbers, symbols, English words, half-width text, and both Japanese and US keyboards.
 
-The product idea is simple: stay in the sentence. KeyroIME reduces the tiny interruptions that usually happen between "I know what I want to type" and "it appears on screen."
+The product idea is simple: stay in the sentence. KeyroIME reduces the small interruptions that usually happen between "I know what I want to type" and "it appears on screen."
 
-## The Golden Three Seconds
+## Keep the Sentence Moving
 
-Open a text field, start typing, and keep going.
+Japanese writing naturally includes dates, prices, model numbers, email addresses, URLs, English terms, and katakana loanwords. KeyroIME treats them as parts of one writing task rather than separate input modes to manage. Move from kana/kanji conversion to half-width numbers, punctuation, or English, select the candidate you need, and continue with the next phrase.
 
-KeyroIME is built so the first impression is not a settings screen or a learning curve. It is the feeling that numbers, punctuation, English, kana/kanji conversion, katakana loanwords, and keyboard layout changes are already where your fingers expect them to be.
+Getting started does not require a complex setup. Familiar keys control the input mode, character width, punctuation style, and JIS/ANSI layout. KeyroIME works with existing Windows applications, and if the dictionary service is temporarily unavailable, local romaji-to-kana conversion keeps basic input available.
 
-## Product Promise
+KeyroIME is designed for practical workflows such as:
 
-- Type Japanese faster by reducing mode switching, extra conversion steps, and repeated full-width/half-width corrections.
-- Enter half-width numbers, symbols, and English smoothly during Japanese writing.
-- Switch ANSI/JIS physical keyboard behavior for Japanese, US, and mixed workplace environments.
-- Find katakana loanwords, names, places, and long phrases through mixed dictionary ranking, fuzzy prediction, and dynamic candidate concatenation.
-- Keep the v1.0 experience local-first: no login, no cloud dependency, and no AI runtime loaded into Windows text host processes.
+- Writing email and business documents that mix Japanese with dates, prices, product names, and addresses.
+- Combining English identifiers, commands, and symbols with Japanese explanations in development and technical writing.
+- Moving between Japanese and US keyboards across office, home, and international work environments.
+- Finding katakana loanwords, personal names, place names, station names, and longer phrases through mixed dictionaries and predictive candidates.
+- Keeping dictionary lookup and candidate generation on the Windows PC without requiring an account or cloud connection.
+
+The `q` prefix prioritizes translation candidates, while `v` prioritizes names, places, and stations. Fuzzy prediction and dynamic candidate concatenation help surface useful forms from partial readings, including names that are not stored as a single dictionary entry.
 
 ## Architecture
 
