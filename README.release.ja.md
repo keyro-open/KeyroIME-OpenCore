@@ -4,28 +4,19 @@ KeyroIME は Windows x64 向けの日本語入力ソフトウェアです。日�
 
 ## インストール
 
-1. ZIP を展開します。
-2. `install.bat` を右クリックし、管理者として実行します。
-3. インストール後、通知領域に KeyroIME アイコンが表示されます。
-4. 入力先アプリで Windows の入力方式から KeyroIME を選択します。
+1. GitHub Release から `KeyroIME_Setup_v1.0.6.15.exe` をダウンロードします。
+2. EXE を実行し、Windows の確認画面で許可します。
+3. 案内画面でインストール先とライセンスを確認し、「インストール」を選択します。
+4. インストール後、通知領域に KeyroIME アイコンが表示されます。
+5. 入力先アプリで Windows の入力方式から KeyroIME を選択します。
 
-`install.bat` は、同梱されている場合に `SHA256SUMS.txt` を使ってリリースファイルを検証してからインストールします。
+必要に応じて、同じ Release の `.sha256` ファイルでダウンロードした EXE を検証できます。
 
 更新後に古い DLL を読み込んだアプリが残る場合があります。動作が古いままの場合は、対象アプリを閉じて開き直すか、サインアウトして再度サインインしてください。
 
 ## アンインストール
 
-学習辞書を残してアンインストールする場合:
-
-```bat
-uninstall.bat /silent
-```
-
-学習辞書も削除する場合:
-
-```bat
-uninstall.bat /silent /purge
-```
+Windows の「インストールされているアプリ」から KeyroIME OpenCore を選択します。既定では学習辞書を保持します。学習辞書も削除する場合は、管理者の command prompt から uninstaller に `/PURGEDATA` を指定します。
 
 ## 主な機能
 

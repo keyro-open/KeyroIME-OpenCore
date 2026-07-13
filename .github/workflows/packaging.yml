@@ -1,0 +1,99 @@
+name: Windows Installer Packaging
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: windows-installer-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    env:
+      RUSTUP_TOOLCHAIN: 1.96.0
+      KEYROIME_SKIP_DESKTOP_SMOKES: 1
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+
+      - name: Install pinned Rust toolchain
+        shell: pwsh
+        run: rustup toolchain install 1.96.0 --profile minimal --component rustfmt --target x86_64-pc-windows-msvc
+
+      - name: Validate version and installer contract
+        id: metadata
+        shell: pwsh
+        run: |
+          $version = (Get-Content -Raw VERSION).Trim()
+          if ($version -notmatch '^\d+\.\d+\.\d+\.\d+$') {
+            throw "VERSION must contain four numeric components: $version"
+          }
+          if ($env:GITHUB_REF_TYPE -eq 'tag' -and $env:GITHUB_REF_NAME -ne "v$version") {
+            throw "Tag $env:GITHUB_REF_NAME does not match VERSION $version"
+          }
+          python tools/check_installer_contract.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Build and test release products
+        shell: cmd
+        run: build_release.bat
+
+      - name: Compile guided EXE installer
+        shell: pwsh
+        run: tools/build_installer.ps1
+
+      - name: Validate installer and create checksum
+        id: package
+        shell: pwsh
+        run: |
+          $version = '${{ steps.metadata.outputs.version }}'
+          $installer = "dist/KeyroIME_Setup_v$version.exe"
+          python tools/check_installer_contract.py --installer $installer
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $installer).Hash.ToLowerInvariant()
+          $name = [IO.Path]::GetFileName($installer)
+          $checksum = "$installer.sha256"
+          "$hash *$name" | Set-Content -LiteralPath $checksum -Encoding ascii -NoNewline
+          "installer=$installer" >> $env:GITHUB_OUTPUT
+          "checksum=$checksum" >> $env:GITHUB_OUTPUT
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: KeyroIME-OpenCore-Installer-v${{ steps.metadata.outputs.version }}
+          path: |
+            ${{ steps.package.outputs.installer }}
+            ${{ steps.package.outputs.checksum }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish tagged GitHub Release
+        if: github.ref_type == 'tag'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          $installer = '${{ steps.package.outputs.installer }}'
+          $checksum = '${{ steps.package.outputs.checksum }}'
+          gh release view $tag --repo $env:GITHUB_REPOSITORY *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $tag $installer $checksum `
+              --repo $env:GITHUB_REPOSITORY --clobber
+          }
+          else {
+            gh release create $tag $installer $checksum `
+              --repo $env:GITHUB_REPOSITORY --verify-tag --generate-notes `
+              --title "KeyroIME OpenCore $tag"
+          }

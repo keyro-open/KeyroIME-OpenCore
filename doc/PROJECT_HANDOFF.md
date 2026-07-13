@@ -26,11 +26,12 @@ KeyroIME OpenCore は、Windows x64 向け日本語 IME「KeyroIME」の個人�
 - URL: `https://github.com/keyro-open/KeyroIME-OpenCore.git`
 - 可視性: Private。
 - default branch: `main`
-- base commit: `b623d2474a103080d51287931f7714c9b5c33fad`
-- current work branch: `agent/resolve-public-release-risks`
+- base commit: `d9af5371391122f86418bfc2a4622242e44cd3fe`
+- current work branch: `agent/add-installer-packaging`
 - release tag: 未作成。
+- PR #3: マージ済み。
 - PR #2: マージ済み。
-- PR #1: Draft。README 改善は current work branch に取り込み済み。本ブランチのマージ後に重複 PR として整理する。
+- PR #1: Draft。`main` に同等の README 改善が含まれるため、重複 PR として整理する。
 
 ## 実行時アーキテクチャ
 
@@ -154,7 +155,7 @@ Version source:
 6. public dictionary manifest preparation
 7. release SHA-256 generation
 
-GitHub Actions は Windows build、55 Rust tests、非対話 smoke、secured service IPC integration を実行します。
+GitHub Actions は Windows build、55 Rust tests、非対話 smoke、secured service IPC integration を実行します。`Windows Installer Packaging` は pull request、`main`、手動実行、`v*` tag で release build と guided EXE を再生成します。tag は `VERSION` と一致する必要があり、tag build は EXE と SHA-256 を GitHub Release へ公開します。
 
 Release package:
 
@@ -168,6 +169,20 @@ Release package:
 
 Installer は checksum と x64 PE を確認し、service を `LocalService` で登録します。`uninstall.bat` は既定で WAL を保持し、`/purge` 指定時のみ削除します。`/validate` はシステム変更なしで package/script 前提を確認します。
 
+利用者向け guided installer:
+
+- output: `KeyroIME_Setup_v<VERSION>.exe`
+- cover: image、install path、copyright、source-available license
+- presentation: product 1、product 2、advertisement 3、advertisement 4 を各 3 秒表示
+- virtual progress: 100 ms 更新、最低 12 秒、presentation 中は back/next/cancel/close を禁止
+- finish: image、基本操作、tray 起動 option
+- installed payload: 3 product binaries、2 license files、third-party notice、public dictionary manifest の 7 ファイルのみ
+- excluded: `doc/`、handoff、test/smoke/bench、`.bat`、`.ps1`、`.py`
+- UI bitmap: Setup EXE 内だけで使用し、product directory へコピーしない
+- uninstall: 既定で WAL を保持し、`/PURGEDATA` のみで削除
+
+詳細は `doc/INSTALLER_PACKAGING.md` を参照します。
+
 ## 2026-07-13 検証
 
 - Rust release tests: 55 passed、0 failed。
@@ -180,22 +195,28 @@ Installer は checksum と x64 PE を確認し、service を `LocalService` で�
 - public full manifest: local path/旧 provenance なし。
 - release checksum: 11 files passed。
 - installer/uninstaller `/validate`: passed。
+- guided installer contract: passed。
+- guided installer UI transition: 4 x 3 seconds and 12-second lock passed。
+- installer EXE: 3,324,191 bytes。SHA-256 は build ごとに `.sha256` file へ生成。
+- 6 placeholder bitmap regeneration: passed。
+- packaging workflow YAML structure: passed。
 - GitHub Actions Windows CI: passed（run `29257686514`）。
 
 未実施:
 
 - 管理者権限による実 install/update/uninstall/purge。既存の Windows IME と service を変更するため、専用テスト環境で実施する。
-- Authenticode signing。証明書と鍵は repository 外で管理する。
+- Authenticode signing。現在の検証用 EXE は未署名。証明書と鍵は repository 外で管理する。
 
 ## 残存リスクと次の作業
 
-1. Draft PR の CI と review を完了し、`main` へ merge する。
-2. 専用 VM で install/update/uninstall/purge と `LocalService` ACL を確認する。
+1. Current packaging Draft PR の Windows CI、installer artifact、review を完了し、`main` へ merge する。
+2. 専用 VM で install/update/uninstall/`PURGEDATA` と `LocalService` ACL を確認する。
 3. Notepad、Chromium/Electron、AppContainer/UWP の実 host test を継続する。
 4. 非商用 source license を日本法の専門家に最終確認する。
 5. repository 外の code-signing pipeline を整備する。
 6. 旧 commit には廃止済み GPL 文面が含まれる。Public 化前に最終 tree から clean public baseline を作成するか、明示的承認の下で history rewrite を実施する。既存 history をそのまま公開しない。
 7. clean baseline の current tree と全 Git refs を再監査する。
 8. `v1.0.6.15` release tag と GitHub Release を作成する。
+9. `installer/assets/` の placeholder を正式画像へ差し替える。
 
 TSF DLL 更新時は、Explorer/CTF 再起動または sign-out/sign-in により旧 DLL mapping を解放します。
