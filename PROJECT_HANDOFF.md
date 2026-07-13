@@ -86,6 +86,7 @@ KeyroIME OpenCore は OSI 定義のオープンソースではなく、個人・
 - `install.bat /validate`: 成功。
 - `uninstall.bat /validate`: 成功。
 - `git diff --check`: 成功。
+- GitHub Actions Windows CI: 成功（run `29257686514`）。
 
 管理者権限を使う実インストール・アンインストールは、既存 IME と Windows サービスを変更するため、この作業中には実行していません。公開配布前に専用テスト環境で確認します。
 

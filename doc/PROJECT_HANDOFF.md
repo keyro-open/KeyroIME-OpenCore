@@ -180,11 +180,11 @@ Installer は checksum と x64 PE を確認し、service を `LocalService` で�
 - public full manifest: local path/旧 provenance なし。
 - release checksum: 11 files passed。
 - installer/uninstaller `/validate`: passed。
+- GitHub Actions Windows CI: passed（run `29257686514`）。
 
 未実施:
 
 - 管理者権限による実 install/update/uninstall/purge。既存の Windows IME と service を変更するため、専用テスト環境で実施する。
-- GitHub Actions remote run。Draft PR 作成後に確認する。
 - Authenticode signing。証明書と鍵は repository 外で管理する。
 
 ## 残存リスクと次の作業
