@@ -20,6 +20,7 @@ jobs:
     timeout-minutes: 30
     env:
       RUSTUP_TOOLCHAIN: 1.96.0
+      KEYROIME_SKIP_DESKTOP_SMOKES: 1
 
     steps:
       - name: Check out source

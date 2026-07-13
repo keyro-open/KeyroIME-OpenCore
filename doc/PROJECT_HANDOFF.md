@@ -197,7 +197,7 @@ Installer は checksum と x64 PE を確認し、service を `LocalService` で�
 - installer/uninstaller `/validate`: passed。
 - guided installer contract: passed。
 - guided installer UI transition: 4 x 3 seconds and 12-second lock passed。
-- installer EXE: 3,324,191 bytes、SHA-256 `3792dfc2e4be8f474a269e44dacf1ae8d9a85c9976e4273a7cbf529b661c36a2`。
+- installer EXE: 3,324,191 bytes。SHA-256 は build ごとに `.sha256` file へ生成。
 - 6 placeholder bitmap regeneration: passed。
 - packaging workflow YAML structure: passed。
 - GitHub Actions Windows CI: passed（run `29257686514`）。

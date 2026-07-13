@@ -4,6 +4,8 @@
 
 GitHub Actions の `Windows Installer Packaging` ワークフローは、Windows x64 向けの単一 EXE インストーラーを生成します。
 
+GitHub の非対話 runner では Windows TSF profile と tray UI に依存する 2 件の desktop smoke を省略します。Rust tests、TSF activation、local fallback、candidate tag、IPC failover は packaging job 内でも実行します。desktop smoke を含む全検証は、通常のローカル `build_release.bat` で実行します。
+
 - ファイル名: `KeyroIME_Setup_v<VERSION>.exe`
 - `main` への push: 30 日間保持する Actions artifact を生成
 - pull request: パッケージの再現性とインストーラー契約を検証

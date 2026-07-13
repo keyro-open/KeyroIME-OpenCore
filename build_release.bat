@@ -82,18 +82,22 @@ if !ERRORLEVEL! NEQ 0 (
     exit /b 1
 )
 
-echo Running runtime input smoke test...
-"%TSF_BUILD_DIR%\Release\keyro_runtime_input_smoke.exe"
-if !ERRORLEVEL! NEQ 0 (
-    echo Runtime input smoke test failed with exit code !ERRORLEVEL!.
-    exit /b 1
-)
+if /i "%KEYROIME_SKIP_DESKTOP_SMOKES%"=="1" (
+    echo Skipping runtime input and tray menu smoke tests in a non-interactive environment.
+) else (
+    echo Running runtime input smoke test...
+    "%TSF_BUILD_DIR%\Release\keyro_runtime_input_smoke.exe"
+    if !ERRORLEVEL! NEQ 0 (
+        echo Runtime input smoke test failed with exit code !ERRORLEVEL!.
+        exit /b 1
+    )
 
-echo Running tray menu smoke test...
-"%TSF_BUILD_DIR%\Release\keyro_tray_menu_smoke.exe"
-if !ERRORLEVEL! NEQ 0 (
-    echo Tray menu smoke test failed with exit code !ERRORLEVEL!.
-    exit /b 1
+    echo Running tray menu smoke test...
+    "%TSF_BUILD_DIR%\Release\keyro_tray_menu_smoke.exe"
+    if !ERRORLEVEL! NEQ 0 (
+        echo Tray menu smoke test failed with exit code !ERRORLEVEL!.
+        exit /b 1
+    )
 )
 
 echo Running IPC failover smoke test...

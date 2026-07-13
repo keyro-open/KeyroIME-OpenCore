@@ -89,7 +89,7 @@ KeyroIME OpenCore は OSI 定義のオープンソースではなく、個人・
 - `uninstall.bat /validate`: 成功。
 - Guided installer contract: 成功。製品 7 ファイルと UI 6 ファイルの許可リストを確認。
 - Guided installer UI test: 成功。4 画面 x 3 秒、100 ms 進捗、12 秒間の操作抑止を確認。
-- 正式 EXE build: 成功。3,324,191 bytes、SHA-256 `3792dfc2e4be8f474a269e44dacf1ae8d9a85c9976e4273a7cbf529b661c36a2`。
+- 正式 EXE build: 成功。3,324,191 bytes。SHA-256 は build ごとに `.sha256` file へ生成。
 - Placeholder image reproducibility: 6 ファイル一致。
 - GitHub Actions packaging workflow YAML: 構文・構造検査成功。
 - `git diff --check`: 成功。
