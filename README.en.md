@@ -86,7 +86,9 @@ Useful validation tools are generated under `src\tsf_shell\build\Release\`, incl
 
 ## Install
 
-Installation requires Administrator privileges:
+For end-user distribution, run `KeyroIME_Setup_v<VERSION>.exe` from the GitHub Release and review the destination and license on the guide page. Installation requires Administrator privileges.
+
+The following command remains available for development-time manual validation:
 
 ```bat
 release\install.bat /silent
@@ -94,13 +96,13 @@ release\install.bat /silent
 
 After upgrading the TSF DLL, restart Explorer/CTF or sign out and sign in again so text hosts stop using old loaded DLLs.
 
-To uninstall while preserving learned dictionary data:
+To uninstall the development package while preserving learned dictionary data:
 
 ```bat
 release\uninstall.bat /silent
 ```
 
-Add `/purge` to remove the preserved user dictionary data.
+The EXE package can be removed from Windows Installed apps. It preserves learned dictionary data by default; pass `/PURGEDATA` to its uninstaller to remove that data. Add `/purge` when using the development script.
 
 ## Data Safety and Source Control
 

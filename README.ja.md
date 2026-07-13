@@ -86,7 +86,9 @@ build_release.bat
 
 ## インストール
 
-インストールには管理者権限が必要です。
+利用者向け配布では GitHub Release の `KeyroIME_Setup_v<VERSION>.exe` を実行します。案内画面でインストール先とライセンスを確認してください。インストールには管理者権限が必要です。
+
+開発中の手動検証では次の command も利用できます。
 
 ```bat
 release\install.bat /silent
@@ -94,13 +96,13 @@ release\install.bat /silent
 
 TSF DLL を更新した後は、古い DLL を読み込んだホストを残さないように、Explorer/CTF の再起動またはサインアウト・サインインを推奨します。
 
-学習辞書を残してアンインストールする場合:
+学習辞書を残して手動アンインストールする場合:
 
 ```bat
 release\uninstall.bat /silent
 ```
 
-学習辞書も削除する場合は `/purge` を追加します。
+EXE 版は Windows の「インストールされているアプリ」から削除できます。既定では学習辞書を保持し、学習辞書も削除する場合は uninstaller に `/PURGEDATA` を指定します。手動 script では `/purge` を追加します。
 
 ## データ安全性とソース管理
 

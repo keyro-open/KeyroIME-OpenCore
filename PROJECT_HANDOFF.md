@@ -20,11 +20,12 @@
 - リポジトリ: `https://github.com/keyro-open/KeyroIME-OpenCore.git`
 - 可視性: Private。公開前確認後に Public へ移行する予定。
 - デフォルトブランチ: `main`
-- 作業ブランチ: `agent/resolve-public-release-risks`
-- 作業ブランチの基点: `b623d2474a103080d51287931f7714c9b5c33fad`
+- 作業ブランチ: `agent/add-installer-packaging`
+- 作業ブランチの基点: `d9af5371391122f86418bfc2a4622242e44cd3fe`
 - Git release tag: 未作成。
+- PR #3: マージ済み。
 - PR #2: マージ済み。
-- PR #1: Draft、未マージ。この作業ブランチは PR #1 の日英 README 改善を取り込んでいるため、本ブランチのマージ後に PR #1 を重複 PR として整理する。
+- PR #1: Draft、未マージ。`main` に同等の README 改善が含まれるため、重複 PR として整理する。
 
 ## ライセンス基準
 
@@ -47,6 +48,7 @@ KeyroIME OpenCore は OSI 定義のオープンソースではなく、個人・
 - `KeyroIME.dll`: C++17 TSF/COM テキストサービス。
 - `keyro_service.exe`: Rust 2021 辞書、予測、順位付け、ユーザー頻度、IPC サービス。
 - `keyro_tray.exe`: C++17 通知領域、OSD、About、License UI。
+- `KeyroIME_Setup_v<VERSION>.exe`: Inno Setup 6 による日英対応の対話式 x64 installer。
 - IPC: `\\.\pipe\KeyroIME.Service.v1` の小型リトルエンディアン・バイナリプロトコル。
 
 セキュリティ変更:
@@ -85,6 +87,11 @@ KeyroIME OpenCore は OSI 定義のオープンソースではなく、個人・
 - Release SHA-256: 11 ファイル検証成功。
 - `install.bat /validate`: 成功。
 - `uninstall.bat /validate`: 成功。
+- Guided installer contract: 成功。製品 7 ファイルと UI 6 ファイルの許可リストを確認。
+- Guided installer UI test: 成功。4 画面 x 3 秒、100 ms 進捗、12 秒間の操作抑止を確認。
+- 正式 EXE build: 成功。3,324,191 bytes、SHA-256 `3792dfc2e4be8f474a269e44dacf1ae8d9a85c9976e4273a7cbf529b661c36a2`。
+- Placeholder image reproducibility: 6 ファイル一致。
+- GitHub Actions packaging workflow YAML: 構文・構造検査成功。
 - `git diff --check`: 成功。
 - GitHub Actions Windows CI: 成功（run `29257686514`）。
 
@@ -101,17 +108,21 @@ KeyroIME OpenCore は OSI 定義のオープンソースではなく、個人・
 - IPC v1 仕様書と C++/Rust 定数互換検査を追加。
 - 旧 `state_machine.rs` を test-only にし、production dead-code 警告を除去。
 - `SECURITY.md` と `CONTRIBUTING.md` を追加。
+- 日英対応の単一 EXE installer、12 秒の製品紹介、完了画面、`LocalService` 登録、データ保持 uninstall を追加。
+- `main`/pull request/tag/manual に対応する GitHub Actions packaging と tag Release 公開を追加。
+- installer payload の明示的許可リストと、システムを変更しない UI capture test を追加。
 
 ## 次に行う作業
 
-1. このブランチの Draft PR をレビューし、CI 成功後にマージする。
-2. 専用 Windows テスト環境で管理者インストール、サービスアカウント、更新、アンインストール、`/purge` を確認する。
+1. このブランチの Draft PR で Windows CI と installer packaging を確認し、review 後にマージする。
+2. 専用 Windows テスト環境で管理者インストール、サービスアカウント、更新、アンインストール、`/PURGEDATA` を確認する。
 3. Notepad、Chromium/Electron、AppContainer/UWP の実ホスト入力を継続検証する。
 4. ライセンス正文を日本法の専門家に最終確認する。
-5. コード署名証明書をリポジトリ外で管理し、署名済み Release を作成する。
+5. コード署名証明書をリポジトリ外で管理し、GitHub Actions の署名工程を追加する。現在の検証用 EXE は未署名。
 6. 旧 commit には廃止済み GPL 文面が含まれるため、Public 変更前に最終 tree から clean public baseline を作成するか、明示的な承認を得て history を rewrite する。現在の history をそのまま Public にしない。
 7. clean baseline に対して現行 tree と Git history を再監査し、`v1.0.6.15` tag を作成する。
 8. C++ と Rust の IPC 定数は互換検査で保護済み。将来は必要に応じて単一コード生成へ移行する。
+9. `installer/assets/` の 6 枚の placeholder を正式画像へ差し替える。
 
 ## 変更時の必須条件
 
