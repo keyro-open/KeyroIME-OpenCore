@@ -45,13 +45,18 @@ jobs:
           --input src/keyro_service/assets/dictionary_manifest.json
           --output $env:RUNNER_TEMP/dictionary_manifest.json
 
-      - name: Test Rust service
+      - name: Build and test Rust service
         env:
           PROGRAMDATA: ${{ runner.temp }}\KeyroIMEProgramData
-        run: >-
-          cargo test --release --target x86_64-pc-windows-msvc
-          --manifest-path src/keyro_service/Cargo.toml
-          --target-dir target/keyro_service_runtime
+        shell: pwsh
+        run: |
+          cargo build --release --target x86_64-pc-windows-msvc `
+            --manifest-path src/keyro_service/Cargo.toml `
+            --target-dir target/keyro_service_runtime
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cargo test --release --target x86_64-pc-windows-msvc `
+            --manifest-path src/keyro_service/Cargo.toml `
+            --target-dir target/keyro_service_runtime
 
       - name: Configure C++ x64 Release
         run: cmake -S src/tsf_shell -B src/tsf_shell/build -G "Visual Studio 17 2022" -A x64
