@@ -16,7 +16,8 @@
   },
   "curated_supplements": {
     "added_on": "2026-06-28",
-    "license": "Project-authored and user-provided local KeyroIME dictionary supplements",
+    "origin": "Original data authored and owned by LocalPro Co., Ltd.",
+    "license": "KeyroIME OpenCore Non-Commercial Source License 1.0",
     "counts": {
       "system": 1567,
       "names": 3,
@@ -35,7 +36,8 @@
   "local_dictionary_imports": [
     {
       "imported_on": "2026-06-28",
-      "source": "external local source file",
+      "source": "LocalPro-authored original source file",
+      "provenance": "Authored and owned by LocalPro Co., Ltd.; no external dictionary content.",
       "note": "Column 1 category and column 4 priority are used only as import/ranking hints; they are not displayed as candidates.",
       "source_rows": 1441,
       "duplicates_or_invalid_skipped": 1195,

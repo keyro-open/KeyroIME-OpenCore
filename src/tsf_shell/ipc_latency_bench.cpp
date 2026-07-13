@@ -1,22 +1,21 @@
 // Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 // Brand Official Website: https://keyro.jp
 //
-// This file is part of KeyroIME (キーロ) v1.0 OpenCore.
-// KeyroIME is free software: you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software Foundation.
-//
-// For commercial use licensing, custom deployment, or proprietary integrations,
-// please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
-// commercial exploitation is strictly prohibited.
+// This file is part of KeyroIME (キーロ) OpenCore.
+// It is source-available under the KeyroIME OpenCore Non-Commercial Source
+// License 1.0. See LICENSE. Commercial use requires a separate written license
+// from 株式会社LocalPro.
 // ipc_latency_bench.cpp
 // Console benchmark client for KeyroIME named pipe lookup latency.
 
 #include "ipc/named_pipe_client.h"
 
 #include <algorithm>
+#include <chrono>
 #include <iostream>
 #include <numeric>
 #include <string>
+#include <thread>
 #include <vector>
 
 namespace {
@@ -56,6 +55,7 @@ int main(int argc, char** argv)
     int requestedPage = argc > 3 ? std::atoi(argv[3]) : 0;
     uint32_t page = requestedPage > 0 ? static_cast<uint32_t>(requestedPage) : 0;
     std::wstring pipeName = argc > 4 ? Utf8ToWide(argv[4]) : std::wstring();
+    int pauseMs = argc > 5 ? std::atoi(argv[5]) : 0;
     if (iterations < 1) {
         iterations = 1;
     }
@@ -76,6 +76,9 @@ int main(int argc, char** argv)
             firstResponse = response;
         }
         latencies.push_back(response.latencyMs);
+        if (pauseMs > 0 && i + 1 < iterations) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(pauseMs));
+        }
     }
 
     std::sort(latencies.begin(), latencies.end());
@@ -88,7 +91,8 @@ int main(int argc, char** argv)
     std::cout << "KeyroIME IPC latency benchmark\n";
     std::cout << "input=" << input << " page=" << page
               << " total_pages=" << firstResponse.totalPages
-              << " iterations=" << iterations << "\n";
+              << " iterations=" << iterations
+              << " pause_ms=" << pauseMs << "\n";
     for (size_t index = 0; index < firstResponse.candidates.size(); ++index) {
         std::cout << (index + 1) << ". " << WideToUtf8(firstResponse.candidates[index]) << "\n";
     }

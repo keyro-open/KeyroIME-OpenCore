@@ -1,13 +1,10 @@
 // Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 // Brand Official Website: https://keyro.jp
 //
-// This file is part of KeyroIME (キーロ) v1.0 OpenCore.
-// KeyroIME is free software: you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software Foundation.
-//
-// For commercial use licensing, custom deployment, or proprietary integrations,
-// please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
-// commercial exploitation is strictly prohibited.
+// This file is part of KeyroIME (キーロ) OpenCore.
+// It is source-available under the KeyroIME OpenCore Non-Commercial Source
+// License 1.0. See LICENSE. Commercial use requires a separate written license
+// from 株式会社LocalPro.
 use std::collections::{HashMap, HashSet};
 use std::env;
 use std::fs::{self, OpenOptions};
@@ -49,6 +46,8 @@ const MAX_FRAGMENT_POSTINGS: usize = 1024;
 const MAX_USER_PREDICTIVE_CANDIDATES: usize = 24;
 const USER_BASE_SCORE: u32 = 30_000;
 const USER_FREQUENCY_STEP: u32 = 200;
+const MAX_USER_FIELD_CHARACTERS: usize = 256;
+const MAX_USER_WAL_BYTES: u64 = 16 * 1024 * 1024;
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub enum DictionaryKind {
@@ -530,6 +529,12 @@ fn append_user_wal(reading: &str, text: &str) {
             return;
         }
     }
+    if fs::metadata(&path)
+        .map(|metadata| metadata.len() >= MAX_USER_WAL_BYTES)
+        .unwrap_or(false)
+    {
+        return;
+    }
     if let Ok(mut file) = OpenOptions::new().create(true).append(true).open(path) {
         let _ = writeln!(file, "{reading}\t{text}\t1");
     }
@@ -546,6 +551,7 @@ fn sanitize_field(value: &str) -> String {
     value
         .chars()
         .filter(|character| *character != '\t' && *character != '\r' && *character != '\n')
+        .take(MAX_USER_FIELD_CHARACTERS)
         .collect::<String>()
         .trim()
         .to_string()
@@ -1109,6 +1115,16 @@ mod tests {
             candidate.score,
             USER_BASE_SCORE + second * USER_FREQUENCY_STEP
         );
+    }
+
+    #[test]
+    fn user_dictionary_fields_are_sanitized_and_bounded() {
+        let input = format!("{}\tignored\n", "あ".repeat(MAX_USER_FIELD_CHARACTERS + 20));
+        let sanitized = sanitize_field(&input);
+        assert_eq!(sanitized.chars().count(), MAX_USER_FIELD_CHARACTERS);
+        assert!(sanitized
+            .chars()
+            .all(|character| !matches!(character, '\t' | '\r' | '\n')));
     }
 
     #[test]

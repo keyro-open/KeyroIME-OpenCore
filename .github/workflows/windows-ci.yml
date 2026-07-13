@@ -1,0 +1,104 @@
+name: Windows CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: windows-2022
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+
+      - name: Install pinned Rust toolchain
+        shell: pwsh
+        run: rustup toolchain install 1.96.0 --profile minimal --component rustfmt --target x86_64-pc-windows-msvc
+
+      - name: Check Rust formatting
+        run: cargo fmt --manifest-path src/keyro_service/Cargo.toml --all -- --check
+
+      - name: Verify license copies
+        shell: pwsh
+        run: |
+          $root = (Get-Content LICENSE -Raw).Replace("`r`n", "`n")
+          $release = (Get-Content LICENSE_en.txt -Raw).Replace("`r`n", "`n")
+          if ($root -ne $release) { throw "LICENSE and LICENSE_en.txt differ" }
+
+      - name: Verify IPC protocol constants
+        run: python tools/check_protocol_constants.py
+
+      - name: Verify public dictionary manifest
+        shell: pwsh
+        run: >-
+          python tools/prepare_release_manifest.py
+          --input src/keyro_service/assets/dictionary_manifest.json
+          --output $env:RUNNER_TEMP/dictionary_manifest.json
+
+      - name: Build and test Rust service
+        env:
+          PROGRAMDATA: ${{ runner.temp }}\KeyroIMEProgramData
+        shell: pwsh
+        run: |
+          cargo build --release --target x86_64-pc-windows-msvc `
+            --manifest-path src/keyro_service/Cargo.toml `
+            --target-dir target/keyro_service_runtime
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cargo test --release --target x86_64-pc-windows-msvc `
+            --manifest-path src/keyro_service/Cargo.toml `
+            --target-dir target/keyro_service_runtime
+
+      - name: Configure C++ x64 Release
+        run: cmake -S src/tsf_shell -B src/tsf_shell/build -G "Visual Studio 17 2022" -A x64
+
+      - name: Build C++ products and smoke tests
+        run: >-
+          cmake --build src/tsf_shell/build --config Release --target
+          KeyroIME keyro_tray keyro_tray_menu_smoke keyro_runtime_input_smoke
+          keyro_ipc_bench keyro_ipc_failover_smoke keyro_tsf_activation_smoke
+          keyro_local_fallback_smoke keyro_candidate_tag_smoke tsf_core
+
+      - name: Run non-interactive smoke tests
+        shell: pwsh
+        run: |
+          src/tsf_shell/build/Release/keyro_tsf_activation_smoke.exe
+          src/tsf_shell/build/Release/keyro_local_fallback_smoke.exe
+          src/tsf_shell/build/Release/keyro_candidate_tag_smoke.exe
+          src/tsf_shell/build/Release/keyro_ipc_failover_smoke.exe
+
+      - name: Run secured IPC service integration
+        shell: pwsh
+        env:
+          PROGRAMDATA: ${{ runner.temp }}\KeyroIMEServiceData
+          KEYROIME_TEST_PIPE_NAME: \\.\pipe\KeyroIME.CI
+        run: |
+          $service = Start-Process `
+            -FilePath target/keyro_service_runtime/x86_64-pc-windows-msvc/release/keyro_service.exe `
+            -PassThru -WindowStyle Hidden
+          try {
+            $ready = $false
+            for ($index = 0; $index -lt 100; $index++) {
+              if ([IO.Directory]::GetFiles('\\.\pipe\') -contains $env:KEYROIME_TEST_PIPE_NAME) {
+                $ready = $true
+                break
+              }
+              Start-Sleep -Milliseconds 50
+            }
+            if (-not $ready) { throw "service pipe did not become ready" }
+            src/tsf_shell/build/Release/keyro_ipc_bench.exe `
+              qschedule 3 0 $env:KEYROIME_TEST_PIPE_NAME 400
+            if ($LASTEXITCODE -ne 0) { throw "IPC integration benchmark failed" }
+          }
+          finally {
+            if (-not $service.HasExited) { Stop-Process -Id $service.Id -Force }
+          }

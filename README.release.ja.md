@@ -9,7 +9,23 @@ KeyroIME は Windows x64 向けの日本語入力ソフトウェアです。日�
 3. インストール後、通知領域に KeyroIME アイコンが表示されます。
 4. 入力先アプリで Windows の入力方式から KeyroIME を選択します。
 
+`install.bat` は、同梱されている場合に `SHA256SUMS.txt` を使ってリリースファイルを検証してからインストールします。
+
 更新後に古い DLL を読み込んだアプリが残る場合があります。動作が古いままの場合は、対象アプリを閉じて開き直すか、サインアウトして再度サインインしてください。
+
+## アンインストール
+
+学習辞書を残してアンインストールする場合:
+
+```bat
+uninstall.bat /silent
+```
+
+学習辞書も削除する場合:
+
+```bat
+uninstall.bat /silent /purge
+```
 
 ## 主な機能
 
@@ -41,4 +57,4 @@ v1.0 はローカル優先です。ログイン、クラウド同期、AI ラン
 
 ## ライセンス
 
-製品ライセンスは同梱の `LICENSE_ja.txt` と `LICENSE_en.txt` を参照してください。辞書由来情報は `THIRD_PARTY_NOTICES.md` と `dictionary_manifest.json` に記録しています。
+KeyroIME OpenCore は個人の非商用利用、改変および共有を許可するソース公開版です。共有時は、同じライセンスで完全な対応ソース、出典および改変内容を提供する必要があります。会社での利用およびその他の商用利用には株式会社LocalProの書面による別途ライセンスが必要です。詳細は同梱の `LICENSE_ja.txt` と `LICENSE_en.txt` を参照してください。辞書由来情報は `THIRD_PARTY_NOTICES.md` と `dictionary_manifest.json` に記録しています。

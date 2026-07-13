@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Build KeyroIME TSV assets from official JMdict/JMnedict gzip XML snapshots."""
+"""Build KeyroIME TSV assets from licensed JMdict/JMnedict snapshots.
+
+Copyright (C) 2025-2026 LocalPro Co., Ltd. All rights reserved.
+Source-available under the KeyroIME OpenCore Non-Commercial Source License 1.0.
+Commercial use requires a separate written license from LocalPro Co., Ltd.
+"""
 
 from __future__ import annotations
 

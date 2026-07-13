@@ -1,19 +1,18 @@
 # Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 # Brand Official Website: https://keyro.jp
 #
-# This file is part of KeyroIME (キーロ) v1.0 OpenCore.
-# KeyroIME is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software Foundation.
-#
-# For commercial use licensing, custom deployment, or proprietary integrations,
-# please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
-# commercial exploitation is strictly prohibited.
+# This file is part of KeyroIME (キーロ) OpenCore.
+# It is source-available under the KeyroIME OpenCore Non-Commercial Source
+# License 1.0. See LICENSE. Commercial use requires a separate written license
+# from 株式会社LocalPro.
 #
 # KeyroIME v1.0 トップレベル CMake ビルド設定
 # ハイブリッド構成: C++ TSF シェル + Rust バックグラウンドサービス/コアエンジン
 
 cmake_minimum_required(VERSION 3.20)
-project(KeyroIME VERSION 1.0.0 LANGUAGES CXX)
+file(READ "${CMAKE_CURRENT_LIST_DIR}/VERSION" KEYRO_VERSION)
+string(STRIP "${KEYRO_VERSION}" KEYRO_VERSION)
+project(KeyroIME VERSION ${KEYRO_VERSION} LANGUAGES CXX)
 
 # グローバル C++ 標準を設定します。
 set(CMAKE_CXX_STANDARD 17)
@@ -34,7 +33,7 @@ set(KEYRO_SERVICE_EXE_PATH "${CMAKE_SOURCE_DIR}/target/keyro_service_runtime/x86
 
 # 構成情報を出力します。
 message(STATUS "=================================================")
-message(STATUS "KeyroIME v1.0 ハイブリッドビルドシステム")
+message(STATUS "KeyroIME v${KEYRO_VERSION} ハイブリッドビルドシステム")
 message(STATUS "=================================================")
 message(STATUS "C++ 標準: ${CMAKE_CXX_STANDARD}")
 message(STATUS "C++ アーキテクチャ: x64")

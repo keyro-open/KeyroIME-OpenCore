@@ -1,15 +1,23 @@
 # Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 # Brand Official Website: https://keyro.jp
 #
-# This file is part of KeyroIME (キーロ) v1.0 OpenCore.
-# KeyroIME is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software Foundation.
-#
-# For commercial use licensing, custom deployment, or proprietary integrations,
-# please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
-# commercial exploitation is strictly prohibited.
+# This file is part of KeyroIME (キーロ) OpenCore.
+# It is source-available under the KeyroIME OpenCore Non-Commercial Source
+# License 1.0. See LICENSE. Commercial use requires a separate written license
+# from 株式会社LocalPro.
 cmake_minimum_required(VERSION 3.20)
-project(KeyroIME_TSF_Shell)
+set(KEYRO_VERSION_FILE "${CMAKE_CURRENT_LIST_DIR}/../../VERSION")
+file(READ "${KEYRO_VERSION_FILE}" KEYRO_VERSION)
+string(STRIP "${KEYRO_VERSION}" KEYRO_VERSION)
+project(KeyroIME_TSF_Shell VERSION ${KEYRO_VERSION})
+
+set(KEYRO_GENERATED_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
+file(MAKE_DIRECTORY "${KEYRO_GENERATED_INCLUDE_DIR}")
+configure_file(
+    "${CMAKE_CURRENT_LIST_DIR}/version.h.in"
+    "${KEYRO_GENERATED_INCLUDE_DIR}/keyro_version.h"
+    @ONLY
+)
 
 # C++ 標準を設定します。
 set(CMAKE_CXX_STANDARD 17)
@@ -137,6 +145,9 @@ add_executable(keyro_tray_menu_smoke
     tsf_core/shared_settings.h
 )
 target_compile_definitions(keyro_tray_menu_smoke PRIVATE KEYRO_TRAY_TESTING)
+foreach(KEYRO_VERSION_TARGET keyro_test_bench keyro_tray keyro_tray_menu_smoke)
+    target_include_directories(${KEYRO_VERSION_TARGET} PRIVATE "${KEYRO_GENERATED_INCLUDE_DIR}")
+endforeach()
 
 # IPC レイテンシ基準コンソールプログラムを追加します。
 add_executable(keyro_ipc_bench

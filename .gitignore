@@ -10,7 +10,6 @@ dist/
 
 # Rust build output
 /target/
-Cargo.lock
 
 # C++ / MSBuild / Visual Studio build output
 .vs/
@@ -32,6 +31,7 @@ Cargo.lock
 !build_release.bat
 !build_sandbox.bat
 !install.bat
+!uninstall.bat
 *.pyc
 __pycache__/
 

@@ -1,13 +1,10 @@
 // Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 // Brand Official Website: https://keyro.jp
 //
-// This file is part of KeyroIME (キーロ) v1.0 OpenCore.
-// KeyroIME is free software: you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software Foundation.
-//
-// For commercial use licensing, custom deployment, or proprietary integrations,
-// please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
-// commercial exploitation is strictly prohibited.
+// This file is part of KeyroIME (キーロ) OpenCore.
+// It is source-available under the KeyroIME OpenCore Non-Commercial Source
+// License 1.0. See LICENSE. Commercial use requires a separate written license
+// from 株式会社LocalPro.
 #include "ipc/named_pipe_client.h"
 
 #include <chrono>
@@ -18,6 +15,14 @@
 int main()
 {
     const wchar_t* pipeName = L"\\\\.\\pipe\\KeyroIME.FailoverSmoke";
+    KeyroIME::NamedPipeClient client(pipeName);
+    KeyroIME::IpcCandidateResponse oversized =
+        client.RequestCandidatesSync(std::string(4097, 'a'), 0);
+    if (oversized.ok || oversized.errorCode != ERROR_INVALID_DATA) {
+        std::cerr << "oversized IPC request was not rejected\n";
+        return 1;
+    }
+
     HANDLE server = CreateNamedPipeW(
         pipeName,
         PIPE_ACCESS_DUPLEX,
@@ -29,7 +34,7 @@ int main()
         nullptr);
     if (server == INVALID_HANDLE_VALUE) {
         std::cerr << "failed to create smoke pipe\n";
-        return 1;
+        return 2;
     }
 
     std::thread stalledServer([server]() {
@@ -43,7 +48,6 @@ int main()
         CloseHandle(server);
     });
 
-    KeyroIME::NamedPipeClient client(pipeName);
     KeyroIME::IpcCandidateResponse response = client.RequestCandidatesSync("koukan", 0);
     stalledServer.join();
 
@@ -51,7 +55,7 @@ int main()
         std::cerr << "failover deadline failed: ok=" << response.ok
                   << " error=" << response.errorCode
                   << " latency_ms=" << response.latencyMs << "\n";
-        return 2;
+        return 3;
     }
 
     std::cout << "IPC failover smoke passed: latency_ms=" << response.latencyMs << "\n";

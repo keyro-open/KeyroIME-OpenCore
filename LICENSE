@@ -1,28 +1,127 @@
-KeyroIME OpenCore License
+KeyroIME OpenCore Non-Commercial Source License 1.0
 
-Copyright (c) 2026 株式会社LocalPro. All rights reserved.
+Copyright (C) 2024-2026 LocalPro Co., Ltd. All rights reserved.
 
-KeyroIME OpenCore source code is licensed under the GNU General Public License
-version 3 only (GPL-3.0-only), except where a separate file-level license or
-third-party notice explicitly applies.
+This license applies to the KeyroIME OpenCore source code and binaries unless a
+file-level notice or THIRD_PARTY_NOTICES.md states otherwise.
 
-You may use, study, modify, and redistribute the GPL-covered OpenCore source
-code under the terms of GPL v3. If you distribute modified or unmodified
-GPL-covered binaries, you must comply with GPL v3 source-code, license, and
-notice obligations.
+1. Definitions
 
-The KeyroIME name, キーロ name, keyro.jp brand, 株式会社LocalPro name, logos,
-icons, product identifiers, and trademarks are not licensed for misleading
-endorsement, rebranding, or unrelated commercial use.
+"You" means a natural person acting on your own behalf and not on behalf of a
+company, organization, employer, client, or other legal entity.
 
-This OpenCore repository must not include closed-source commercial ranking
-logic, enterprise encrypted dictionary payloads, private SLM models, customer
-assets, credentials, or commercial installer secrets.
+"Non-Commercial Purpose" means personal study, personal use, research,
+experimentation, or hobby activity that does not seek or produce direct or
+indirect commercial advantage, monetary compensation, business value, or
+revenue.
 
-Third-party dictionary data, metadata, and derived resources remain governed by
-their own licenses and attribution requirements. See THIRD_PARTY_NOTICES.md and
-src/keyro_service/assets/dictionary_manifest.json for known notices.
+"Commercial Use" includes use, copying, modification, distribution, deployment,
+support, integration, or other exploitation by or for a company, organization,
+employer, client, paid service, revenue-generating activity, or other commercial
+purpose, whether internal or external and whether or not a separate fee is
+charged for KeyroIME.
 
-The software and materials are provided "as is", without warranty of any kind,
-express or implied, including but not limited to warranties of merchantability,
-fitness for a particular purpose, non-infringement, availability, or accuracy.
+"Corresponding Source" means the complete source code needed to build, install,
+run, and modify the distributed version, including your modifications and
+associated build scripts.
+
+2. Personal Non-Commercial Grant
+
+Subject to this license, LocalPro Co., Ltd. grants You a worldwide,
+non-exclusive, royalty-free license to:
+
+- use and study KeyroIME OpenCore for a Non-Commercial Purpose;
+- modify the source code for a Non-Commercial Purpose; and
+- share unmodified or modified source code and binaries for a Non-Commercial
+  Purpose if all requirements in Section 3 are met.
+
+No patent, trademark, commercial-use, or other right is granted except as
+expressly stated in this license.
+
+3. Requirements for Sharing
+
+If You share any unmodified or modified copy, in source or binary form, You must:
+
+- provide the complete Corresponding Source at no charge with the copy or
+  through a clear, durable, publicly accessible link;
+- license the complete covered-software portion of any shared derivative work
+  under this same license, without adding terms that restrict recipients from
+  exercising the permissions granted here; third-party materials identified
+  under Section 6 remain under their applicable terms;
+- retain this license, all copyright notices, THIRD_PARTY_NOTICES.md, and
+  applicable third-party notices;
+- clearly identify LocalPro Co., Ltd. and the original KeyroIME OpenCore project
+  at https://github.com/keyro-open/KeyroIME-OpenCore as the source;
+- clearly describe that You changed the software and identify the date and
+  general nature of the changes; and
+- avoid stating or implying that LocalPro Co., Ltd. endorses, certifies, or
+  supports your modified version.
+
+4. Commercial Use Requires a Separate License
+
+Commercial Use is not permitted under this license. Before any Commercial Use,
+You must obtain a separate written commercial license from LocalPro Co., Ltd.
+Commercial licensing information is available at https://localpro.jp.
+
+5. Prohibited Conduct
+
+You may not:
+
+- remove or conceal copyright, license, source-attribution, or third-party
+  notices;
+- distribute binaries without the Corresponding Source required by Section 3;
+- use KeyroIME names, logos, icons, domains, company names, or other brand assets
+  in a way that implies endorsement or creates confusion about origin;
+- use the software in violation of applicable law; or
+- sublicense, sell, lease, or commercially exploit the software under this
+  license.
+
+6. Third-Party Materials
+
+This license does not replace or limit licenses that apply to third-party code,
+dictionary data, metadata, or other materials. You must comply with those terms.
+Known notices are listed in THIRD_PARTY_NOTICES.md and
+src/keyro_service/assets/dictionary_manifest.json.
+
+7. Contributions
+
+Unless LocalPro Co., Ltd. agrees otherwise in writing, any contribution You
+submit to the KeyroIME OpenCore project is offered to recipients under this
+license. By submitting a contribution, You also grant LocalPro Co., Ltd. a
+perpetual, worldwide, non-exclusive, irrevocable, royalty-free license to use,
+reproduce, modify, prepare derivative works of, publicly display, publicly
+perform, distribute, sublicense, relicense, and commercially exploit that
+contribution, including as part of KeyroIME under different license terms. You
+represent that You have the right to submit the contribution and grant these
+rights.
+
+8. Termination
+
+Your rights under this license terminate automatically if You violate it. If You
+stop the violation and cure all effects within 30 days after discovery, the
+license is reinstated provisionally unless LocalPro Co., Ltd. notifies You
+otherwise in writing. Sections concerning ownership, third-party materials,
+disclaimers, liability, and governing law survive termination.
+
+9. Disclaimer of Warranty
+
+THE SOFTWARE AND MATERIALS ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE, NON-INFRINGEMENT, AVAILABILITY, OR ACCURACY.
+
+10. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, LOCALPRO CO., LTD. AND ITS CONTRIBUTORS
+WILL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL,
+OR EXEMPLARY DAMAGES ARISING FROM THE SOFTWARE OR THIS LICENSE.
+
+11. Governing Law and Jurisdiction
+
+This license is governed by the laws of Japan, without regard to conflict-of-law
+rules. The Tokyo District Court has exclusive jurisdiction as the court of first
+instance for disputes arising from this license.
+
+12. Language
+
+LICENSE_ja.txt is provided as a Japanese translation. If the English and
+Japanese texts conflict, this English text controls.

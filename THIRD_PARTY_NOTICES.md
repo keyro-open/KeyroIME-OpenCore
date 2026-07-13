@@ -19,7 +19,9 @@ Current third-party source snapshot was generated on 2026-06-15; the release man
 
 The release TSV files are deterministic, size-bounded derivatives of the official snapshots. Existing product baseline entries are merged before priority filtering so regression samples remain available.
 
-Project-authored curated supplement TSV files, including the high-frequency katakana loanword asset updated on 2026-06-22, are maintained as KeyroIME product baseline data and are not copied from additional third-party dictionaries. Katakana coverage is cross-checked against the National Institute for Japanese Language and Linguistics public "Gairaigo" terminology pages and Digital Agency public standard-guideline terminology. These pages are terminology references only; KeyroIME does not redistribute their explanations or bulk page content.
+LocalPro-authored curated supplement TSV files, including the high-frequency katakana loanword asset updated on 2026-06-22, are original data authored and owned by LocalPro Co., Ltd. They are not copied from additional third-party dictionaries. Katakana coverage is cross-checked against the National Institute for Japanese Language and Linguistics public "Gairaigo" terminology pages and Digital Agency public standard-guideline terminology. These pages are terminology references only; KeyroIME does not redistribute their explanations or bulk page content.
+
+The local import recorded in `dictionary_manifest.json` is also original data authored and owned by LocalPro Co., Ltd. The generic local filename was an internal preparation label and did not identify an external dictionary source.
 
 - NINJAL terminology reference: https://www2.ninjal.ac.jp/gairaigo/Teian1_4/index.html
 - Digital Agency terminology reference: https://www.digital.go.jp/resources/standard_guidelines
