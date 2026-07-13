@@ -1,8 +1,8 @@
-# KeyroIME OpenCore v1.0
+# KeyroIME OpenCore v1.0.6.15
 
-KeyroIME OpenCore is the public source baseline for the KeyroIME Windows Japanese IME.
+KeyroIME OpenCore is the source-available, non-commercial community baseline for the KeyroIME Windows Japanese IME.
 
-Public repository:
+Repository:
 
 ```text
 https://github.com/keyro-open/KeyroIME-OpenCore.git
@@ -12,21 +12,23 @@ Do not add closed-source ranking logic, encrypted enterprise dictionary payloads
 
 KeyroIME is a local-first Japanese input method editor for Windows x64. It is designed for people who write Japanese while constantly touching numbers, symbols, English words, half-width text, and both Japanese and US keyboards.
 
-The product idea is simple: stay in the sentence. KeyroIME reduces the tiny interruptions that usually happen between "I know what I want to type" and "it appears on screen."
+The product idea is simple: stay in the sentence. KeyroIME reduces the small interruptions that usually happen between "I know what I want to type" and "it appears on screen."
 
-## The Golden Three Seconds
+## Keep the Sentence Moving
 
-Open a text field, start typing, and keep going.
+Japanese writing naturally includes dates, prices, model numbers, email addresses, URLs, English terms, and katakana loanwords. KeyroIME treats them as parts of one writing task rather than separate input modes to manage. Move from kana/kanji conversion to half-width numbers, punctuation, or English, select the candidate you need, and continue with the next phrase.
 
-KeyroIME is built so the first impression is not a settings screen or a learning curve. It is the feeling that numbers, punctuation, English, kana/kanji conversion, katakana loanwords, and keyboard layout changes are already where your fingers expect them to be.
+Getting started does not require a complex setup. Familiar keys control the input mode, character width, punctuation style, and JIS/ANSI layout. KeyroIME works with existing Windows applications, and if the dictionary service is temporarily unavailable, local romaji-to-kana conversion keeps basic input available.
 
-## Product Promise
+KeyroIME is designed for practical workflows such as:
 
-- Type Japanese faster by reducing mode switching, extra conversion steps, and repeated full-width/half-width corrections.
-- Enter half-width numbers, symbols, and English smoothly during Japanese writing.
-- Switch ANSI/JIS physical keyboard behavior for Japanese, US, and mixed workplace environments.
-- Find katakana loanwords, names, places, and long phrases through mixed dictionary ranking, fuzzy prediction, and dynamic candidate concatenation.
-- Keep the v1.0 experience local-first: no login, no cloud dependency, and no AI runtime loaded into Windows text host processes.
+- Writing email and business documents that mix Japanese with dates, prices, product names, and addresses.
+- Combining English identifiers, commands, and symbols with Japanese explanations in development and technical writing.
+- Moving between Japanese and US keyboards across office, home, and international work environments.
+- Finding katakana loanwords, personal names, place names, station names, and longer phrases through mixed dictionaries and predictive candidates.
+- Keeping dictionary lookup and candidate generation on the Windows PC without requiring an account or cloud connection.
+
+The `q` prefix prioritizes translation candidates, while `v` prioritizes names, places, and stations. Fuzzy prediction and dynamic candidate concatenation help surface useful forms from partial readings, including names that are not stored as a single dictionary entry.
 
 ## Architecture
 
@@ -92,6 +94,14 @@ release\install.bat /silent
 
 After upgrading the TSF DLL, restart Explorer/CTF or sign out and sign in again so text hosts stop using old loaded DLLs.
 
+To uninstall while preserving learned dictionary data:
+
+```bat
+release\uninstall.bat /silent
+```
+
+Add `/purge` to remove the preserved user dictionary data.
+
 ## Data Safety and Source Control
 
 The repository excludes build outputs, release binaries, logs, local deployment paths, credentials, `.env` files, certificates, and generated caches. Before pushing, review:
@@ -103,6 +113,6 @@ git status --ignored --short
 
 ## License and Third-Party Notices
 
-KeyroIME OpenCore source code is licensed under GPL v3. See `LICENSE`.
+KeyroIME OpenCore permits personal non-commercial use, modification, and sharing under the KeyroIME OpenCore Non-Commercial Source License 1.0. Shared versions must provide complete source code under the same license, retain attribution and notices, and identify modifications. Company use and all other commercial use require a separate written license from LocalPro Co., Ltd. See `LICENSE`.
 
 Dictionary assets include project-authored supplements and third-party-derived resources. See `THIRD_PARTY_NOTICES.md` and `src/keyro_service/assets/dictionary_manifest.json`.

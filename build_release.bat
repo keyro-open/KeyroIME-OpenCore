@@ -3,6 +3,8 @@ chcp 65001 >nul
 setlocal EnableExtensions EnableDelayedExpansion
 
 set "ROOT_DIR=%~dp0"
+set "PRODUCT_VERSION=1.0.6.15"
+if exist "%ROOT_DIR%VERSION" set /p PRODUCT_VERSION=<"%ROOT_DIR%VERSION"
 set "RELEASE_DIR=%ROOT_DIR%release"
 set "TSF_BUILD_DIR=%ROOT_DIR%src\tsf_shell\build"
 set "SERVICE_EXE=%ROOT_DIR%target\keyro_service_runtime\x86_64-pc-windows-msvc\release\keyro_service.exe"
@@ -15,8 +17,20 @@ if exist "%FULL_ASSET_DIR%\dictionary_manifest.json" set "DICTIONARY_ASSET_DIR=%
 set "KEYROIME_DICTIONARY_ASSET_DIR=%DICTIONARY_ASSET_DIR%"
 
 echo ========================================
-echo KeyroIME v1.0 release build
+echo KeyroIME v%PRODUCT_VERSION% release build
 echo ========================================
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "$a=(Get-Content -LiteralPath '%ROOT_DIR%LICENSE' -Raw) -replace '\r\n',([char]10); $b=(Get-Content -LiteralPath '%ROOT_DIR%LICENSE_en.txt' -Raw) -replace '\r\n',([char]10); if($a -ne $b){exit 1}" >nul 2>&1
+if errorlevel 1 (
+    echo LICENSE and LICENSE_en.txt must contain the same English license text.
+    exit /b 1
+)
+
+python "%ROOT_DIR%tools\check_protocol_constants.py"
+if errorlevel 1 (
+    echo IPC protocol compatibility check failed.
+    exit /b 1
+)
 
 echo Building the Rust service...
 echo Dictionary assets: "%KEYROIME_DICTIONARY_ASSET_DIR%"
@@ -114,13 +128,27 @@ copy /y "%TSF_DLL%" "%RELEASE_DIR%\KeyroIME.dll" >nul
 copy /y "%TRAY_EXE%" "%RELEASE_DIR%\keyro_tray.exe" >nul
 copy /y "%SERVICE_EXE%" "%RELEASE_DIR%\keyro_service.exe" >nul
 copy /y "%ROOT_DIR%install.bat" "%RELEASE_DIR%\install.bat" >nul
+copy /y "%ROOT_DIR%uninstall.bat" "%RELEASE_DIR%\uninstall.bat" >nul
 copy /y "%ROOT_DIR%THIRD_PARTY_NOTICES.md" "%RELEASE_DIR%\THIRD_PARTY_NOTICES.md" >nul
 copy /y "%ROOT_DIR%LICENSE_ja.txt" "%RELEASE_DIR%\LICENSE_ja.txt" >nul
 copy /y "%ROOT_DIR%LICENSE_en.txt" "%RELEASE_DIR%\LICENSE_en.txt" >nul
-copy /y "%KEYROIME_DICTIONARY_ASSET_DIR%\dictionary_manifest.json" "%RELEASE_DIR%\dictionary_manifest.json" >nul
+copy /y "%ROOT_DIR%VERSION" "%RELEASE_DIR%\VERSION" >nul
 copy /y "%ROOT_DIR%README.release.ja.md" "%RELEASE_DIR%\README.ja.md" >nul
 if errorlevel 1 (
     echo Copying release files failed.
+    exit /b 1
+)
+
+python "%ROOT_DIR%tools\prepare_release_manifest.py" --input "%KEYROIME_DICTIONARY_ASSET_DIR%\dictionary_manifest.json" --output "%RELEASE_DIR%\dictionary_manifest.json"
+if errorlevel 1 (
+    echo Preparing the public dictionary manifest failed.
+    exit /b 1
+)
+
+echo Generating release checksums...
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "$lines=Get-ChildItem -LiteralPath $env:RELEASE_DIR -File | Sort-Object Name | ForEach-Object { '{0} *{1}' -f (Get-FileHash -Algorithm SHA256 -LiteralPath $_.FullName).Hash.ToLowerInvariant(),$_.Name }; Set-Content -LiteralPath (Join-Path $env:RELEASE_DIR 'SHA256SUMS.txt') -Value $lines -Encoding ascii" >nul 2>&1
+if errorlevel 1 (
+    echo Generating release checksums failed.
     exit /b 1
 )
 

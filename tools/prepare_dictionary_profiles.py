@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Import local curated rows and split full/sample KeyroIME dictionary profiles."""
+"""Import local curated rows and prepare full/sample dictionary profiles.
+
+Copyright (C) 2025-2026 LocalPro Co., Ltd. All rights reserved.
+Source-available under the KeyroIME OpenCore Non-Commercial Source License 1.0.
+Commercial use requires a separate written license from LocalPro Co., Ltd.
+"""
 
 from __future__ import annotations
 
@@ -333,7 +338,13 @@ def select_sample_rows(file_name: str, rows: list[tuple], imported_pairs: set[tu
     return merge_rows(selected)
 
 
-def write_manifest(path: Path, rows_by_file: dict[str, list[tuple]], profile: str, imported: dict[str, int]) -> None:
+def write_manifest(
+    path: Path,
+    rows_by_file: dict[str, list[tuple]],
+    profile: str,
+    imported: dict[str, int],
+    source_origin: str,
+) -> None:
     counts = {
         "system": len(rows_by_file["system.tsv"]),
         "frequent": len(rows_by_file["frequent.tsv"]),
@@ -367,14 +378,16 @@ def write_manifest(path: Path, rows_by_file: dict[str, list[tuple]], profile: st
         "counts": counts,
         "curated_supplements": {
             "added_on": dt.date.today().isoformat(),
-            "license": "Project-authored and user-provided local KeyroIME dictionary supplements",
+            "origin": "Original data authored and owned by LocalPro Co., Ltd.",
+            "license": "KeyroIME OpenCore Non-Commercial Source License 1.0",
             "counts": supplement_counts,
         },
         "effective_counts": effective_counts,
         "local_dictionary_imports": [
             {
                 "imported_on": dt.date.today().isoformat(),
-                "source": "external local source file",
+                "source": source_origin,
+                "provenance": "Authored and owned by LocalPro Co., Ltd.; no external dictionary content.",
                 "note": "Column 1 category and column 4 priority are used only as import/ranking hints; they are not displayed as candidates.",
                 "source_rows": imported.get("source_rows", 0),
                 "duplicates_or_invalid_skipped": imported.get("skipped", 0),
@@ -396,6 +409,11 @@ def write_manifest(path: Path, rows_by_file: dict[str, list[tuple]], profile: st
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source", type=Path)
+    parser.add_argument(
+        "--source-origin",
+        default="LocalPro-authored original source file",
+        help="Public provenance label for the LocalPro-authored import source",
+    )
     parser.add_argument("--assets", type=Path, default=Path("src/keyro_service/assets"))
     parser.add_argument("--dump", type=Path, default=Path("dictionary_dumps/full_assets_current"))
     args = parser.parse_args()
@@ -411,7 +429,13 @@ def main() -> None:
     args.dump.mkdir(parents=True, exist_ok=True)
     for file_name, rows in rows_by_file.items():
         write_asset(args.dump / file_name, rows)
-    write_manifest(args.dump / "dictionary_manifest.json", rows_by_file, "full_local", imported)
+    write_manifest(
+        args.dump / "dictionary_manifest.json",
+        rows_by_file,
+        "full_local",
+        imported,
+        args.source_origin,
+    )
 
     imported_pairs = {
         row_key(row)
@@ -424,7 +448,13 @@ def main() -> None:
     }
     for file_name, rows in sample_rows.items():
         write_asset(args.assets / file_name, rows)
-    write_manifest(args.assets / "dictionary_manifest.json", sample_rows, "development_sample", imported)
+    write_manifest(
+        args.assets / "dictionary_manifest.json",
+        sample_rows,
+        "development_sample",
+        imported,
+        args.source_origin,
+    )
 
     readme = args.dump / "README.txt"
     readme.write_text(

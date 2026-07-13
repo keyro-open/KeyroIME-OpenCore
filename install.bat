@@ -6,9 +6,14 @@ set "SERVICE_NAME=KeyroIME_Service"
 set "SERVICE_DISPLAY=KeyroIME Service"
 set "PIPE_NAME=\\.\pipe\KeyroIME.Service.v1"
 set "INSTALL_DIR=%ProgramFiles%\KeyroIME"
+set "DATA_DIR=%ProgramData%\KeyroIME"
 set "ROOT_DIR=%~dp0"
+set "PRODUCT_VERSION=1.0.6.15"
+if exist "%ROOT_DIR%VERSION" set /p PRODUCT_VERSION=<"%ROOT_DIR%VERSION"
 set "SILENT_MODE=0"
+set "VALIDATE_ONLY=0"
 if /i "%~1"=="/silent" set "SILENT_MODE=1"
+if /i "%~1"=="/validate" set "VALIDATE_ONLY=1"
 
 set "TSF_DLL_SRC=%ROOT_DIR%KeyroIME.dll"
 set "TRAY_EXE_SRC=%ROOT_DIR%keyro_tray.exe"
@@ -35,20 +40,22 @@ if not exist "%SERVICE_EXE_SRC%" set "SERVICE_EXE_SRC=%ROOT_DIR%src\keyro_servic
 if not exist "%SERVICE_EXE_SRC%" set "SERVICE_EXE_SRC=%ROOT_DIR%src\keyro_service\target\release\keyro_service.exe"
 
 echo ========================================
-echo KeyroIME v1.0 installer
+echo KeyroIME v%PRODUCT_VERSION% installer
 echo ========================================
-
-net session >nul 2>&1
-if errorlevel 1 (
-    echo Administrator privileges are required.
-    call :WAIT_END
-    exit /b 1
-)
 
 echo Validating release files...
 if not exist "%TSF_DLL_SRC%" goto MISSING_TSF
 if not exist "%TRAY_EXE_SRC%" goto MISSING_TRAY
 if not exist "%SERVICE_EXE_SRC%" goto MISSING_SERVICE
+
+if exist "%ROOT_DIR%SHA256SUMS.txt" (
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "$root=$env:ROOT_DIR; $ok=$true; foreach($line in Get-Content -LiteralPath (Join-Path $root 'SHA256SUMS.txt')) { if($line -notmatch '^([0-9a-fA-F]{64}) \*(.+)$'){$ok=$false; break}; $path=Join-Path $root $Matches[2]; if(-not (Test-Path -LiteralPath $path) -or (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash -ne $Matches[1]){$ok=$false; break} }; if($ok){exit 0}else{exit 1}" >nul 2>&1
+    if errorlevel 1 (
+        echo Release checksum validation failed.
+        call :WAIT_END
+        exit /b 1
+    )
+)
 
 call :CHECK_X64_BINARY "%TSF_DLL_SRC%" "KeyroIME.dll"
 if errorlevel 1 goto INVALID_BINARY
@@ -56,6 +63,18 @@ call :CHECK_X64_BINARY "%TRAY_EXE_SRC%" "keyro_tray.exe"
 if errorlevel 1 goto INVALID_BINARY
 call :CHECK_X64_BINARY "%SERVICE_EXE_SRC%" "keyro_service.exe"
 if errorlevel 1 goto INVALID_BINARY
+
+if "%VALIDATE_ONLY%"=="1" (
+    echo Release file validation passed.
+    exit /b 0
+)
+
+net session >nul 2>&1
+if errorlevel 1 (
+    echo Administrator privileges are required.
+    call :WAIT_END
+    exit /b 1
+)
 
 for /f "usebackq delims=" %%H in (`powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "$s=(Get-FileHash -Algorithm SHA256 -LiteralPath $env:TSF_DLL_SRC).Hash+(Get-FileHash -Algorithm SHA256 -LiteralPath $env:TRAY_EXE_SRC).Hash+(Get-FileHash -Algorithm SHA256 -LiteralPath $env:SERVICE_EXE_SRC).Hash; $sha=[Security.Cryptography.SHA256]::Create(); try { $bytes=[Text.Encoding]::ASCII.GetBytes($s); $hash=$sha.ComputeHash($bytes); ([BitConverter]::ToString($hash)).Replace('-','').Substring(0,12) } finally { $sha.Dispose() }"`) do set "BUILD_ID=%%H"
 if not defined BUILD_ID (
@@ -142,9 +161,28 @@ if errorlevel 1 (
 )
 
 echo Registering and starting the backend service...
-"%SC_EXE%" create "%SERVICE_NAME%" binPath= "\"%SERVICE_EXE_DEST%\"" start= auto type= own DisplayName= "%SERVICE_DISPLAY%" >nul 2>&1
+if not exist "%DATA_DIR%" mkdir "%DATA_DIR%" >nul 2>&1
+if not exist "%DATA_DIR%" (
+    echo Failed to create the service data directory.
+    call :WAIT_END
+    exit /b 1
+)
+"%ICACLS_EXE%" "%DATA_DIR%" /inheritance:e /grant:r "*S-1-5-19:^(OI^)^(CI^)M" "*S-1-5-18:^(OI^)^(CI^)F" "*S-1-5-32-544:^(OI^)^(CI^)F" >nul 2>&1
+if errorlevel 1 (
+    echo Failed to secure the service data directory.
+    call :WAIT_END
+    exit /b 1
+)
+
+"%SC_EXE%" create "%SERVICE_NAME%" binPath= "\"%SERVICE_EXE_DEST%\"" start= auto type= own obj= "NT AUTHORITY\LocalService" DisplayName= "%SERVICE_DISPLAY%" >nul 2>&1
 if errorlevel 1 (
     echo Backend service registration failed.
+    call :WAIT_END
+    exit /b 1
+)
+"%SC_EXE%" qc "%SERVICE_NAME%" 2>nul | findstr /i "LocalService" >nul
+if errorlevel 1 (
+    echo Backend service account validation failed.
     call :WAIT_END
     exit /b 1
 )
@@ -164,7 +202,6 @@ if errorlevel 1 (
     exit /b 1
 )
 
-"%ICACLS_EXE%" "%PIPE_NAME%" /grant *S-1-15-2-1:^(R,W^) >nul 2>&1
 call :START_TRAY_UNELEVATED
 if errorlevel 1 (
     echo Failed to start the tray process with limited user privileges.

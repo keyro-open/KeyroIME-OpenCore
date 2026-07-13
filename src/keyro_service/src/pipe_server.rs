@@ -1,13 +1,10 @@
 // Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 // Brand Official Website: https://keyro.jp
 //
-// This file is part of KeyroIME (キーロ) v1.0 OpenCore.
-// KeyroIME is free software: you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software Foundation.
-//
-// For commercial use licensing, custom deployment, or proprietary integrations,
-// please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
-// commercial exploitation is strictly prohibited.
+// This file is part of KeyroIME (キーロ) OpenCore.
+// It is source-available under the KeyroIME OpenCore Non-Commercial Source
+// License 1.0. See LICENSE. Commercial use requires a separate written license
+// from 株式会社LocalPro.
 use std::env;
 use std::ffi::c_void;
 use std::io::{Error, ErrorKind, Result};
@@ -16,6 +13,7 @@ use std::panic::{catch_unwind, AssertUnwindSafe};
 use std::ptr::null_mut;
 use std::sync::{Arc, OnceLock, RwLock};
 use std::thread;
+use std::time::{Duration, Instant};
 
 use crate::dictionary;
 use crate::protocol::{
@@ -37,6 +35,7 @@ const PIPE_ACCESS_DUPLEX: Dword = 0x0000_0003;
 const PIPE_TYPE_BYTE: Dword = 0x0000_0000;
 const PIPE_READMODE_BYTE: Dword = 0x0000_0000;
 const PIPE_WAIT: Dword = 0x0000_0000;
+const PIPE_REJECT_REMOTE_CLIENTS: Dword = 0x0000_0008;
 const PIPE_UNLIMITED_INSTANCES: Dword = 255;
 
 const ERROR_PIPE_CONNECTED: Dword = 535;
@@ -46,6 +45,7 @@ const PIPE_BUFFER_BYTES: Dword = 8192;
 const PIPE_DEFAULT_TIMEOUT_MS: Dword = 10;
 const PIPE_WORKER_COUNT: usize = 16;
 const PIPE_WORKER_STACK_BYTES: usize = 256 * 1024;
+const PIPE_CLIENT_READ_TIMEOUT: Duration = Duration::from_millis(250);
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
@@ -94,6 +94,14 @@ unsafe extern "system" {
     fn FlushFileBuffers(file: Handle) -> Bool;
     fn GetLastError() -> Dword;
     fn LocalFree(memory: *mut c_void) -> *mut c_void;
+    fn PeekNamedPipe(
+        named_pipe: Handle,
+        buffer: *mut c_void,
+        buffer_size: Dword,
+        bytes_read: *mut Dword,
+        total_bytes_available: *mut Dword,
+        bytes_left_this_message: *mut Dword,
+    ) -> Bool;
     fn ReadFile(
         file: Handle,
         buffer: *mut c_void,
@@ -159,7 +167,7 @@ fn create_pipe(pipe_name: &[u16], security_descriptor: &SecurityDescriptor) -> R
         CreateNamedPipeW(
             pipe_name.as_ptr(),
             PIPE_ACCESS_DUPLEX,
-            PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
+            PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT | PIPE_REJECT_REMOTE_CLIENTS,
             PIPE_UNLIMITED_INSTANCES,
             PIPE_BUFFER_BYTES,
             PIPE_BUFFER_BYTES,
@@ -193,7 +201,12 @@ fn handle_client(pipe: PipeHandle) -> Result<()> {
     loop {
         let request = match read_request(pipe.raw()) {
             Ok(request) => request,
-            Err(error) if error.kind() == ErrorKind::UnexpectedEof => break,
+            Err(error)
+                if error.kind() == ErrorKind::UnexpectedEof
+                    || error.kind() == ErrorKind::TimedOut =>
+            {
+                break;
+            }
             Err(error) => {
                 let response = encode_error_response(STATUS_BAD_REQUEST, &error.to_string());
                 write_all(pipe.raw(), &response)?;
@@ -316,6 +329,7 @@ fn dispatch_request(request: LookupRequest) -> Result<Vec<u8>> {
 fn read_exact(handle: Handle, buffer: &mut [u8]) -> Result<()> {
     let mut offset = 0;
     while offset < buffer.len() {
+        wait_for_available_bytes(handle, buffer.len() - offset, PIPE_CLIENT_READ_TIMEOUT)?;
         let mut bytes_read = 0;
         let ok = unsafe {
             ReadFile(
@@ -337,6 +351,40 @@ fn read_exact(handle: Handle, buffer: &mut [u8]) -> Result<()> {
         offset += bytes_read as usize;
     }
     Ok(())
+}
+
+fn wait_for_available_bytes(handle: Handle, required: usize, timeout: Duration) -> Result<()> {
+    if required == 0 {
+        return Ok(());
+    }
+
+    let started = Instant::now();
+    loop {
+        let mut available = 0;
+        let ok = unsafe {
+            PeekNamedPipe(
+                handle,
+                null_mut(),
+                0,
+                null_mut(),
+                &mut available,
+                null_mut(),
+            )
+        };
+        if ok == FALSE {
+            return Err(Error::last_os_error());
+        }
+        if available as usize >= required {
+            return Ok(());
+        }
+        if started.elapsed() >= timeout {
+            return Err(Error::new(
+                ErrorKind::TimedOut,
+                "named pipe client read timed out",
+            ));
+        }
+        thread::sleep(Duration::from_millis(1));
+    }
 }
 
 fn write_all(handle: Handle, buffer: &[u8]) -> Result<()> {
@@ -400,7 +448,7 @@ impl SecurityDescriptor {
             "D:P",
             "(A;;GA;;;SY)",
             "(A;;GA;;;BA)",
-            "(A;;GA;;;AU)",
+            "(A;;GA;;;LS)",
             "(A;;GA;;;IU)",
             "(A;;GA;;;S-1-15-2-1)",
             "(A;;GA;;;S-1-15-2-2)",

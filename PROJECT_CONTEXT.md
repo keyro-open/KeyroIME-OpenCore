@@ -32,6 +32,7 @@ static dictionaries, ranking, paging, user frequency
 Core isolation rules:
 
 - The TSF DLL does not load Rust, full dictionaries, configuration files, network code, or AI runtimes inside host processes.
+- The Rust backend service runs as `LocalService`, rejects remote pipe clients, and stores its bounded WAL under `%ProgramData%\KeyroIME` with service-only write access.
 - If the background service fails, `Activate` must still return `S_OK`, and the IME must keep local fallback input.
 - TSF callbacks must not block on slow IPC while holding COM locks.
 - Production binaries are Release x64.
@@ -116,6 +117,8 @@ Constraints:
 - The client uses a short total deadline for connect, write, response header, and payload reads.
 - Overlapped I/O must fail fast when the pipe is busy or unavailable.
 - Async responses must be checked against the current input and page before use.
+- The server disconnects clients that do not provide a complete bounded request within 250 ms. The client retries once when a stale persistent connection has been closed.
+- Pipe access is limited to required local service, administrator, interactive-user, and AppContainer identities. It is not an authorization boundary between applications in the same interactive Windows environment.
 
 ## Input Behavior
 
@@ -151,6 +154,8 @@ build_release.bat
 
 The script builds and tests the Rust service, configures CMake for Visual Studio x64, builds the TSF DLL, tray executable, smoke tests, and release package.
 
+The product version is read from the repository-root `VERSION` file. Rust uses the SemVer-compatible package version `1.0.6+15`, and CMake/UI/release scripts use `1.0.6.15`. The Rust toolchain and `Cargo.lock` are committed for reproducibility. Windows CI builds the products and runs non-interactive smoke tests.
+
 Useful checks:
 
 ```powershell
@@ -169,3 +174,4 @@ src\tsf_shell\build\Release\keyro_ipc_failover_smoke.exe
 - `src/keyro_service/src/state_machine.rs` is a legacy prototype path and currently produces `dead_code` warnings.
 - C++ and Rust currently maintain protocol constants separately. A shared protocol source should include cross-language encoding compatibility tests.
 - Runtime behavior must stay local-first: no network, login, or AI dependency in v1.0.
+- Code signing remains a release-operations requirement because signing certificates and keys must not be stored in this repository.

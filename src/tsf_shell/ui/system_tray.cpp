@@ -1,13 +1,10 @@
 // Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 // Brand Official Website: https://keyro.jp
 //
-// This file is part of KeyroIME (キーロ) v1.0 OpenCore.
-// KeyroIME is free software: you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software Foundation.
-//
-// For commercial use licensing, custom deployment, or proprietary integrations,
-// please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
-// commercial exploitation is strictly prohibited.
+// This file is part of KeyroIME (キーロ) OpenCore.
+// It is source-available under the KeyroIME OpenCore Non-Commercial Source
+// License 1.0. See LICENSE. Commercial use requires a separate written license
+// from 株式会社LocalPro.
 // system_tray.cpp
 
 #include "system_tray.h"
@@ -19,6 +16,7 @@
 
 #include "../resource.h"
 #include "../tsf_core/tip_guid.h"
+#include "keyro_version.h"
 
 namespace KeyroIME {
 
@@ -478,7 +476,7 @@ void CreateAboutControls(HWND hwnd)
     CreateWindowExW(
         0,
         L"STATIC",
-        L"Version v1.0.6.15  |  OpenCore",
+        L"Version v" KEYROIME_PRODUCT_VERSION_W L"  |  OpenCore",
         WS_CHILD | WS_VISIBLE | SS_LEFT,
         0,
         0,
@@ -491,9 +489,9 @@ void CreateAboutControls(HWND hwnd)
     CreateWindowExW(
         0,
         L"STATIC",
-        L"オープンソースでクリーンな日本語入力ソフトウェアです。\n"
+        L"個人向け非商用ソース公開版の日本語入力ソフトウェアです。\n"
         L"純 C++17 TSF シェルと Rust 製ローカルコアサービスを基盤に、"
-        L"20.7 万語のオフライン辞書と、遅延を抑えたプロセス分離アーキテクチャを備えています。\n"
+        L"ローカル辞書と、遅延を抑えたプロセス分離アーキテクチャを備えています。\n"
         L"個人利用、検証、開発用途で安心して使える OpenCore 版です。",
         WS_CHILD | WS_VISIBLE | SS_LEFT,
         0,
@@ -565,7 +563,7 @@ void CreateLicenseControls(HWND hwnd, const std::wstring& text)
     CreateWindowExW(
         0,
         L"STATIC",
-        L"著作権、GPL v3、商用利用に関する重要な情報です。",
+        L"著作権、非商用ソースライセンス、商用利用に関する重要な情報です。",
         WS_CHILD | WS_VISIBLE | SS_LEFT,
         0,
         0,
@@ -1425,7 +1423,7 @@ void SystemTray::HandleUpdateCheckCommand()
     ResetUpdateReminder();
     MessageBoxW(
         m_hParent ? m_hParent : m_messageWindow,
-        L"KeyroIME OpenCore v1.0.6.15\n\n"
+        L"KeyroIME OpenCore v" KEYROIME_PRODUCT_VERSION_W L"\n\n"
         L"現在のバージョンではオンライン更新確認を行いません。\n"
         L"2週間後に再度お知らせします。",
         L"アップデートを確認",

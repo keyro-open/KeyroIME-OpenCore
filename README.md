@@ -1,12 +1,12 @@
-# KeyroIME OpenCore v1.0
+# KeyroIME OpenCore v1.0.6.15
 
 Type Japanese without breaking your flow.
 
-KeyroIME OpenCore is a local-first Japanese input method editor for Windows x64. It keeps kana/kanji conversion, katakana loanwords, half-width numbers and symbols, English input, and JIS/ANSI keyboard switching close to the keys your fingers already know.
+KeyroIME OpenCore is a local-first, source-available Japanese input method editor for Windows x64. It keeps kana/kanji conversion, katakana loanwords, half-width numbers and symbols, English input, and JIS/ANSI keyboard switching close to the keys your fingers already know.
 
 Japanese writing rarely stays in one character set. A single email or technical note may contain names, dates, prices, model numbers, URLs, commands, and English terminology. KeyroIME brings those transitions into one continuous workflow so you can spend less time correcting modes and more time finishing the sentence.
 
-Official public repository:
+Repository:
 
 ```text
 https://github.com/keyro-open/KeyroIME-OpenCore.git
@@ -31,6 +31,8 @@ KeyroIME is intended for business documents, software development, technical wri
 
 This repository intentionally excludes build outputs, release binaries, logs, local paths, credentials, generated caches, closed-source commercial logic, private models, customer assets, and commercial installer secrets.
 
+KeyroIME OpenCore permits personal non-commercial use, modification, and sharing. Shared versions must provide complete source code under the same license, retain notices, identify LocalPro and the original project, and describe modifications. Company use and all other commercial use require a separate written license from LocalPro Co., Ltd.
+
 Repository handoff: see [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md) and [doc](doc).
 
-OpenCore license: GPL v3. See [LICENSE](LICENSE). Release packages also include OpenCore notices in [LICENSE_ja.txt](LICENSE_ja.txt) and [LICENSE_en.txt](LICENSE_en.txt). Third-party dictionary notices: see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+OpenCore license: KeyroIME OpenCore Non-Commercial Source License 1.0. See [LICENSE](LICENSE). Release packages also include [LICENSE_ja.txt](LICENSE_ja.txt) and [LICENSE_en.txt](LICENSE_en.txt). Third-party dictionary notices: see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

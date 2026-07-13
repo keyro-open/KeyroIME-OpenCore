@@ -7,17 +7,5 @@
 // from 株式会社LocalPro.
 #pragma once
 
-#include <windows.h>
-
-#include <string>
-
-namespace KeyroIME {
-
-HMODULE DllModuleHandle();
-
-bool BuildModuleSiblingPath(
-    HMODULE moduleHandle,
-    const wchar_t* fileName,
-    std::wstring& absolutePath);
-
-} // namespace KeyroIME
+#define KEYROIME_PRODUCT_VERSION "@KEYRO_VERSION@"
+#define KEYROIME_PRODUCT_VERSION_W L"@KEYRO_VERSION@"

@@ -4,7 +4,7 @@
 
 Act as a Windows software architect, TSF/IME engineer, and Rust/C++ systems engineer.
 
-This repository is the public OpenCore baseline for KeyroIME:
+This repository is the public source-available OpenCore baseline for KeyroIME:
 
 ```text
 https://github.com/keyro-open/KeyroIME-OpenCore.git
@@ -15,10 +15,13 @@ Do not add Chinese text to this public repository.
 
 ## Public Repository Boundary
 
-- Keep this repository limited to the public OpenCore product baseline.
+- Keep this repository limited to the public source-available OpenCore product baseline.
 - Do not add closed-source ranking logic, enterprise encrypted dictionary payloads, private SLM models, customer assets, credentials, or commercial installer secrets.
 - Do not mention private repository names, private GitHub organizations, or local machine paths in tracked files.
 - Generic commercial or proprietary boundaries may be described without exposing private repository locations.
+- Use "source-available" rather than "open source" when describing the license model.
+- Personal non-commercial modification and sharing must follow `LICENSE`; company use and all other commercial use require a separate written license from LocalPro Co., Ltd.
+- Third-party materials remain governed by their own notices and licenses.
 
 ## Handoff Order
 

@@ -1,65 +1,32 @@
 @echo off
 chcp 65001 >nul
+setlocal EnableExtensions
+
+set "ROOT_DIR=%~dp0"
+set "BUILD_DIR=%ROOT_DIR%src\tsf_shell\build"
+set "PRODUCT_VERSION=1.0.6.15"
+if exist "%ROOT_DIR%VERSION" set /p PRODUCT_VERSION=<"%ROOT_DIR%VERSION"
+
 echo ========================================
-echo KeyroIME v1.0 sandbox test build script
+echo KeyroIME v%PRODUCT_VERSION% sandbox build
 echo ========================================
-echo.
 
-REM Enter the TSF shell directory.
-cd src\tsf_shell
-
-REM Create the build directory.
-if not exist build (
-    echo Creating build directory...
-    mkdir build
-)
-
-cd build
-
-REM Configure CMake.
-echo Configuring CMake...
-cmake .. -G "Visual Studio 17 2022" -A x64
-
-if %errorLevel% NEQ 0 (
+echo Configuring the TSF shell...
+cmake -S "%ROOT_DIR%src\tsf_shell" -B "%BUILD_DIR%" -G "Visual Studio 17 2022" -A x64
+if errorlevel 1 (
     echo CMake configuration failed.
-    pause
     exit /b 1
 )
 
-REM Build the Release target.
-echo Building Release target...
-cmake --build . --config Release --target keyro_test_bench
-
-if %errorLevel% NEQ 0 (
-    echo Build failed.
-    pause
+echo Building the sandbox test bench...
+cmake --build "%BUILD_DIR%" --config Release --target keyro_test_bench
+if errorlevel 1 (
+    echo Sandbox build failed.
     exit /b 1
 )
 
-REM Copy ime_core.dll when the compatibility DLL exists.
-echo Copying ime_core.dll...
-if exist "..\..\ime_core\target\release\ime_core.dll" (
-    copy /Y "..\..\ime_core\target\release\ime_core.dll" "Release\" >nul
-    echo [OK] ime_core.dll copied.
-) else (
-    echo [ERROR] ime_core.dll was not found.
-    echo Build the Rust compatibility engine first:
-    echo   cargo build --release --manifest-path src/ime_core/Cargo.toml
-    pause
-    exit /b 1
-)
-
-echo.
 echo ========================================
-echo Build completed.
+echo Sandbox build completed.
+echo Executable: "%BUILD_DIR%\Release\keyro_test_bench.exe"
 echo ========================================
-echo.
-echo Executable:
-echo %CD%\Release\keyro_test_bench.exe
-echo.
-echo Run:
-echo   cd %CD%\Release
-echo   keyro_test_bench.exe
-echo.
-
-pause
+exit /b 0

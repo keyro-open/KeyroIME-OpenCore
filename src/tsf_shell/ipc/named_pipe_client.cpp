@@ -1,13 +1,10 @@
 // Copyright (C) 2025-2026 株式会社LocalPro (LocalPro Co., Ltd.). All rights reserved.
 // Brand Official Website: https://keyro.jp
 //
-// This file is part of KeyroIME (キーロ) v1.0 OpenCore.
-// KeyroIME is free software: you can redistribute it and/or modify it under
-// the terms of the GNU General Public License as published by the Free Software Foundation.
-//
-// For commercial use licensing, custom deployment, or proprietary integrations,
-// please contact 株式会社LocalPro via https://localpro.jp. Unauthorized closed-source
-// commercial exploitation is strictly prohibited.
+// This file is part of KeyroIME (キーロ) OpenCore.
+// It is source-available under the KeyroIME OpenCore Non-Commercial Source
+// License 1.0. See LICENSE. Commercial use requires a separate written license
+// from 株式会社LocalPro.
 // named_pipe_client.cpp
 // KeyroIME TSF shell - compact binary named pipe client implementation.
 
@@ -79,6 +76,9 @@ bool NamedPipeClient::RequestCandidatesAsync(
     ResponseCallback callback)
 {
     std::vector<ResponseCallback> supersededCallbacks;
+    if (input.size() > MAX_INPUT_BYTES) {
+        return false;
+    }
     {
         std::lock_guard<std::mutex> lock(m_mutex);
         if (!m_running) {
@@ -271,6 +271,14 @@ IpcCandidateResponse NamedPipeClient::ExecuteRequest(
     auto started = std::chrono::steady_clock::now();
     auto deadline = started + std::chrono::milliseconds(IPC_TIMEOUT_MS);
     IpcCandidateResponse result = ExecuteRequestOnce(requestType, input, page, deadline);
+    if (!result.ok && RemainingTimeoutMs(deadline) > 0 &&
+        (result.errorCode == ERROR_BROKEN_PIPE ||
+         result.errorCode == ERROR_NO_DATA ||
+         result.errorCode == ERROR_PIPE_NOT_CONNECTED ||
+         result.errorCode == ERROR_INVALID_HANDLE)) {
+        ClosePipe();
+        result = ExecuteRequestOnce(requestType, input, page, deadline);
+    }
     if (!result.ok) {
         ClosePipe();
     }
@@ -288,6 +296,12 @@ IpcCandidateResponse NamedPipeClient::ExecuteRequestOnce(
 {
     IpcCandidateResponse result;
     DWORD errorCode = ERROR_SUCCESS;
+
+    if (input.size() > MAX_INPUT_BYTES) {
+        result.errorCode = ERROR_INVALID_DATA;
+        result.errorMessage = "named pipe request payload exceeds limit";
+        return result;
+    }
 
     if (!EnsureConnected(errorCode, deadline)) {
         result.errorCode = errorCode;
