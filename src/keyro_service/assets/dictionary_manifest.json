@@ -1,7 +1,7 @@
 {
-  "generated_on": "2026-06-28",
+  "generated_on": "2026-08-09",
   "asset_profile": "development_sample",
-  "license": "CC BY-SA 4.0 plus KeyroIME project-authored supplements",
+  "license": "GNU General Public License version 3 for KeyroIME software and authored supplements; CC BY-SA 4.0 for JMdict/JMnedict-derived data",
   "sources": {
     "JMdict_e.gz": "65a52f037d95c9bd0a1954d74825c06d5392626b71630ead431937d6e2c26adf",
     "JMnedict.xml.gz": "56a8138c37a2ee521b1894ca6a64fcbfca62c0752b5b437c5bb0dfdf96d96fea"
@@ -12,26 +12,26 @@
     "names": 220,
     "places": 240,
     "translations": 360,
-    "katakana": 870
+    "katakana": 1253
   },
   "curated_supplements": {
-    "added_on": "2026-06-28",
+    "added_on": "2026-08-09",
     "origin": "Original data authored and owned by LocalPro Co., Ltd.",
-    "license": "KeyroIME OpenCore Non-Commercial Source License 1.0",
+    "license": "GNU General Public License version 3",
     "counts": {
-      "system": 1567,
+      "system": 3175,
       "names": 3,
       "places": 4,
       "translations": 8
     }
   },
   "effective_counts": {
-    "system": 1927,
+    "system": 3535,
     "frequent": 220,
     "names": 223,
     "places": 244,
     "translations": 368,
-    "katakana": 870
+    "katakana": 1253
   },
   "local_dictionary_imports": [
     {
@@ -44,6 +44,19 @@
       "imported_rows": {
         "system_supplement.tsv": 187,
         "katakana.tsv": 59
+      }
+    },
+    {
+      "imported_on": "2026-08-09",
+      "source": "LocalPro-authored Japanese vocabulary corpus v3",
+      "source_sha256": "97dc99568365227ef6230539d5832525a2bf8d929f84ad78ab26063bdbbef437",
+      "provenance": "Authored and owned by LocalPro Co., Ltd.; no external dictionary content.",
+      "note": "Three-column rows are routed by surface script; legacy four-column rows retain their source category when available. Imported pairs are deduplicated across all asset tables.",
+      "source_rows": 8758,
+      "duplicates_or_invalid_skipped": 6767,
+      "imported_rows": {
+        "system_supplement.tsv": 1608,
+        "katakana.tsv": 383
       }
     }
   ],

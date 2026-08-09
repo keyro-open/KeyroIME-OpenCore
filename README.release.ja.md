@@ -48,4 +48,4 @@ v1.0 はローカル優先です。ログイン、クラウド同期、AI ラン
 
 ## ライセンス
 
-KeyroIME OpenCore は個人の非商用利用、改変および共有を許可するソース公開版です。共有時は、同じライセンスで完全な対応ソース、出典および改変内容を提供する必要があります。会社での利用およびその他の商用利用には株式会社LocalProの書面による別途ライセンスが必要です。詳細は同梱の `LICENSE_ja.txt` と `LICENSE_en.txt` を参照してください。辞書由来情報は `THIRD_PARTY_NOTICES.md` と `dictionary_manifest.json` に記録しています。
+KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版です。ライセンスの条件に従い、利用、改変および共有ができます。改変版を共有する場合は、GPLv3 が求める表示と対応ソースを提供してください。詳細は同梱の `LICENSE_ja.txt` と `LICENSE_en.txt` を参照してください。辞書由来情報は `THIRD_PARTY_NOTICES.md` と `dictionary_manifest.json` に記録しています。

@@ -15,7 +15,7 @@ $items = @(
     @{ File = 'progress-1.bmp'; Accent = '#00A887'; Kicker = 'PRODUCT 01'; Title = 'Direct number and symbol input'; Subtitle = 'Fast mixed input without a second candidate selection' },
     @{ File = 'progress-2.bmp'; Accent = '#E09F3E'; Kicker = 'PRODUCT 02'; Title = 'Switch JIS / ANSI dynamically'; Subtitle = 'Keyboard layout and CapsLock controls' },
     @{ File = 'progress-3.bmp'; Accent = '#8B5CF6'; Kicker = 'AD SPACE 03'; Title = 'KeyroIME Pro'; Subtitle = 'On-device AI suggestions | Promotional placeholder' },
-    @{ File = 'progress-4.bmp'; Accent = '#E45757'; Kicker = 'AD SPACE 04'; Title = 'Business Services'; Subtitle = 'Commercial licensing and support | Promotional placeholder' },
+    @{ File = 'progress-4.bmp'; Accent = '#E45757'; Kicker = 'AD SPACE 04'; Title = 'Community'; Subtitle = 'Community support and contribution | Promotional placeholder' },
     @{ File = 'finish.bmp'; Accent = '#1A9C60'; Kicker = 'COMPLETED'; Title = 'Installation completed'; Subtitle = 'KeyroIME OpenCore is ready to use' }
 )
 

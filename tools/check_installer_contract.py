@@ -1,8 +1,8 @@
 """Validate the installer source whitelist and generated executable.
 
 Copyright (C) 2025-2026 LocalPro Co., Ltd. All rights reserved.
-Source-available under the KeyroIME OpenCore Non-Commercial Source License 1.0.
-Commercial use requires a separate written license from LocalPro Co., Ltd.
+GNU GPLv3に基づいて配布されます。LICENSE（英語正文）を参照してください。
+
 """
 
 from __future__ import annotations

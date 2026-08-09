@@ -2,14 +2,15 @@
 """Import local curated rows and prepare full/sample dictionary profiles.
 
 Copyright (C) 2025-2026 LocalPro Co., Ltd. All rights reserved.
-Source-available under the KeyroIME OpenCore Non-Commercial Source License 1.0.
-Commercial use requires a separate written license from LocalPro Co., Ltd.
+GNU GPLv3に基づいて配布されます。LICENSE（英語正文）を参照してください。
+
 """
 
 from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import json
 import shutil
 from collections import defaultdict
@@ -271,7 +272,19 @@ def add_curated_rows(rows_by_file: dict[str, list[tuple]]) -> int:
     return added
 
 
-def import_local_source(rows_by_file: dict[str, list[tuple]], source: Path) -> dict[str, int]:
+def contains_katakana(value: str) -> bool:
+    return any("\u30a0" <= character <= "\u30ff" for character in value)
+
+
+def source_sha256(source: Path) -> str:
+    digest = hashlib.sha256()
+    with source.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def import_local_source(rows_by_file: dict[str, list[tuple]], source: Path) -> dict[str, int | str]:
     existing = {
         row_key(row)
         for rows in rows_by_file.values()
@@ -291,27 +304,44 @@ def import_local_source(rows_by_file: dict[str, list[tuple]], source: Path) -> d
             ["分類", "表記", "読み", "優先度"],
         ):
             continue
-        if len(columns) < 4:
+        if len(columns) == 3:
+            reading, surface, score_text = columns
+            if not reading or not surface or not score_text.isdigit():
+                skipped += 1
+                continue
+            target = "katakana.tsv" if contains_katakana(surface) else "system_supplement.tsv"
+            score = int(score_text)
+        elif len(columns) >= 4 and columns[0] == columns[2]:
+            surface, reading, _, score_text = columns[:4]
+            if not surface or not reading or not score_text.isdigit():
+                skipped += 1
+                continue
+            target = "katakana.tsv" if contains_katakana(surface) else "system_supplement.tsv"
+            score = int(score_text)
+        elif len(columns) >= 4:
+            category, surface, reading, priority = columns[:4]
+            if not surface or not reading:
+                skipped += 1
+                continue
+            normalized_category = category.lower()
+            target = (
+                "katakana.tsv"
+                if "katakana" in normalized_category or "カタカナ" in category
+                else "system_supplement.tsv"
+            )
+            score = score_from_priority(priority)
+        else:
             skipped += 1
             continue
         source_rows += 1
-        category, surface, reading, priority = columns[:4]
-        if not surface or not reading:
-            skipped += 1
-            continue
-        normalized_category = category.lower()
-        target = (
-            "katakana.tsv"
-            if "katakana" in normalized_category or "カタカナ" in category
-            else "system_supplement.tsv"
-        )
-        row = (reading, surface, score_from_priority(priority))
+        row = (reading, surface, score)
         if row_key(row) in existing:
             skipped += 1
             continue
         rows_by_file[target].append(row)
         existing.add(row_key(row))
         imported[target] += 1
+    imported["source_sha256"] = source_sha256(source)
     imported["source_rows"] = source_rows
     imported["skipped"] = skipped
     return dict(imported)
@@ -344,6 +374,7 @@ def write_manifest(
     profile: str,
     imported: dict[str, int],
     source_origin: str,
+    previous_imports: list[dict] | None = None,
 ) -> None:
     counts = {
         "system": len(rows_by_file["system.tsv"]),
@@ -367,6 +398,30 @@ def write_manifest(
         "translations": counts["translations"] + supplement_counts["translations"],
         "katakana": counts["katakana"],
     }
+    local_imports = list(previous_imports or [])
+    if imported.get("source_rows", 0):
+        current_import = {
+            "imported_on": dt.date.today().isoformat(),
+            "source": source_origin,
+            "source_sha256": imported.get("source_sha256", ""),
+            "provenance": "Authored and owned by LocalPro Co., Ltd.; no external dictionary content.",
+            "note": "Three-column rows are routed by surface script; legacy four-column rows retain their source category when available. Imported pairs are deduplicated across all asset tables.",
+            "source_rows": imported.get("source_rows", 0),
+            "duplicates_or_invalid_skipped": imported.get("skipped", 0),
+            "imported_rows": {
+                key: value for key, value in imported.items()
+                if key.endswith(".tsv")
+            },
+        }
+        local_imports = [
+            item for item in local_imports
+            if not (
+                item.get("source") == source_origin
+                and item.get("source_sha256") == current_import["source_sha256"]
+            )
+        ]
+        local_imports.append(current_import)
+
     manifest = {
         "generated_on": dt.date.today().isoformat(),
         "asset_profile": profile,
@@ -379,24 +434,11 @@ def write_manifest(
         "curated_supplements": {
             "added_on": dt.date.today().isoformat(),
             "origin": "Original data authored and owned by LocalPro Co., Ltd.",
-            "license": "KeyroIME OpenCore Non-Commercial Source License 1.0",
+            "license": "GNU General Public License version 3",
             "counts": supplement_counts,
         },
         "effective_counts": effective_counts,
-        "local_dictionary_imports": [
-            {
-                "imported_on": dt.date.today().isoformat(),
-                "source": source_origin,
-                "provenance": "Authored and owned by LocalPro Co., Ltd.; no external dictionary content.",
-                "note": "Column 1 category and column 4 priority are used only as import/ranking hints; they are not displayed as candidates.",
-                "source_rows": imported.get("source_rows", 0),
-                "duplicates_or_invalid_skipped": imported.get("skipped", 0),
-                "imported_rows": {
-                    key: value for key, value in imported.items()
-                    if key.endswith(".tsv")
-                },
-            }
-        ],
+        "local_dictionary_imports": local_imports,
         "profile_note": (
             "development_sample keeps only representative rows for tests and development"
             if profile == "development_sample"
@@ -418,9 +460,17 @@ def main() -> None:
     parser.add_argument("--dump", type=Path, default=Path("dictionary_dumps/full_assets_current"))
     args = parser.parse_args()
 
-    rows_by_file = load_assets(args.assets)
+    baseline_dir = args.dump if args.dump.exists() else args.assets
+    rows_by_file = load_assets(baseline_dir)
+    previous_manifest_path = baseline_dir / "dictionary_manifest.json"
+    previous_manifest = {}
+    if previous_manifest_path.exists():
+        try:
+            previous_manifest = json.loads(previous_manifest_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            previous_manifest = {}
     add_curated_rows(rows_by_file)
-    imported: dict[str, int] = {}
+    imported: dict[str, int | str] = {}
     if args.source is not None:
         if not args.source.exists():
             raise SystemExit(f"source file not found: {args.source}")
@@ -435,6 +485,7 @@ def main() -> None:
         "full_local",
         imported,
         args.source_origin,
+        previous_manifest.get("local_dictionary_imports", []),
     )
 
     imported_pairs = {
@@ -454,6 +505,9 @@ def main() -> None:
         "development_sample",
         imported,
         args.source_origin,
+        json.loads((args.assets / "dictionary_manifest.json").read_text(encoding="utf-8")).get(
+            "local_dictionary_imports", []
+        ) if (args.assets / "dictionary_manifest.json").exists() else [],
     )
 
     readme = args.dump / "README.txt"

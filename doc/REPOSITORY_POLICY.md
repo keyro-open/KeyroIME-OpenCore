@@ -1,15 +1,15 @@
-# KeyroIME OpenCore Repository Policy
+# KeyroIME OpenCore リポジトリ方針
 
-- This repository is the public source-available OpenCore baseline.
-- Use Japanese or English for tracked text, comments, commit messages, and handoff notes.
-- Do not add Chinese text to public repository files.
-- Do not add private repository names, private GitHub organization references, or local machine paths.
-- Describe the license model as source-available, not open source. Personal non-commercial modification and sharing must follow `LICENSE`; company use and all other commercial use require a separate written license from LocalPro Co., Ltd.
-- Keep third-party materials under their own licenses and preserve provenance in `THIRD_PARTY_NOTICES.md` and the dictionary manifest.
-- Obsolete commits contain a superseded license notice. Do not make the existing history public. Publish a clean baseline from the approved final tree, or rewrite history only after explicit authorization and a verified backup.
-- Do not add closed-source commercial ranking logic, enterprise encrypted dictionary payloads, private SLM models, customer assets, credentials, or commercial installer secrets.
-- The TSF DLL must not load Rust, full dictionaries, network components, or AI runtimes inside host processes.
-- Keep IPC on `\\.\pipe\KeyroIME.Service.v1` unless a formal protocol migration is approved.
-- `q`/`v` source promotion, prediction, candidate concatenation, and katakana loanword support are valid OpenCore capabilities.
-- Do not commit `release/`, `dist/`, `target/`, `build/`, certificates, keys, logs, credentials, generated caches, or local path files.
-- For dictionary files, prefer manifest, size, row count, or exact-match sampling. Full TSV reads are allowed only for explicit dictionary import, dictionary audit, or release build work.
+- このリポジトリは GNU GPLv3 に基づく公開 OpenCore 基準です。
+- 追跡対象の新規文章、コメント、コミットメッセージおよび引き継ぎ資料は日本語を使用します。
+- 公開リポジトリのファイルに中国語を追加しないでください。
+- 非公開リポジトリ名、非公開 GitHub 組織、ローカルマシンパスを追加しないでください。
+- ライセンスは GNU GPLv3 とし、利用、改変または再配布を制限する追加条件を設けないでください。
+- 第三者素材には各自のライセンスを適用し、`THIRD_PARTY_NOTICES.md` と辞書 manifest に由来を記録してください。
+- 旧コミットには廃止済みのライセンス表示が含まれます。既存履歴をそのまま公開せず、承認済み tree から clean baseline を作成してください。
+- 非公開順位付けロジック、企業向け暗号化辞書、非公開 SLM、顧客資産、認証情報またはインストーラー秘密情報を追加しないでください。
+- TSF DLL の内部に Rust、完全辞書、ネットワークコンポーネントまたは AI ランタイムを読み込ませないでください。
+- 明示的なプロトコル移行が承認されない限り、IPC は `\\.\pipe\KeyroIME.Service.v1` を使用してください。
+- `q`/`v` の候補優先、予測、候補連結およびカタカナ外来語対応は OpenCore の有効な機能です。
+- `release/`、`dist/`、`target/`、`build/`、証明書、鍵、ログ、認証情報、生成キャッシュまたはローカルパスを commit しないでください。
+- 辞書ファイルの確認では、manifest、サイズ、行数、少量サンプルまたは完全一致検索を優先してください。TSV 全件の読み込みは、明示的な辞書 import、監査または Release 検証時だけ許可します。

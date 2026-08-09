@@ -29,17 +29,16 @@
 
 ## ライセンス基準
 
-KeyroIME OpenCore は OSI 定義のオープンソースではなく、個人・非商用向けのソース公開版です。
+KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版です。
 
-- 適用ライセンス: `KeyroIME OpenCore Non-Commercial Source License 1.0`
-- 個人は非商用目的で利用、調査、改変、共有できる。
-- 共有時は同じライセンスで完全な対応ソースを提供し、LocalPro と元プロジェクトを出典表示し、改変内容を明示する。
-- 会社での利用およびその他の商用利用には、株式会社LocalProの書面による別途ライセンスが必要。
-- 外部コントリビューションは同ライセンスで公開し、株式会社LocalProに再ライセンスと商業利用を含む非独占的権利を付与する。
+- 適用ライセンス: GNU General Public License version 3 (`GPLv3`)
+- GPLv3 の条件に従い、利用、調査、改変および共有ができる。
+- 改変版を共有する場合は、GPLv3 が求める対応ソース、著作権表示およびライセンス表示を提供する。
+- 外部コントリビューションは、原則として GPLv3 の条件で公開する。
 - 第三者辞書は各ライセンスを継続適用する。
 - `LICENSE` と `LICENSE_en.txt` は同一の英語正文であり、`LICENSE_ja.txt` は日本語訳。
 
-公開説明では `open source` ではなく `source-available` を使用します。
+公開説明では `free and open-source software` または「自由なオープンソースソフトウェア」を使用します。
 
 ## 製品とセキュリティ基準
 

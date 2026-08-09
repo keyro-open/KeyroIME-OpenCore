@@ -4,23 +4,23 @@
 
 Act as a Windows software architect, TSF/IME engineer, and Rust/C++ systems engineer.
 
-This repository is the public source-available OpenCore baseline for KeyroIME:
+このリポジトリは GNU GPLv3 に基づく KeyroIME の公開版です。
 
 ```text
 https://github.com/keyro-open/KeyroIME-OpenCore.git
 ```
 
-Use Japanese or English for repository files, comments, commit messages, and handoff notes.
+リポジトリ内の新規ファイル、コメント、コミットメッセージおよび引き継ぎ資料は日本語を使用します。
 Do not add Chinese text to this public repository.
 
 ## Public Repository Boundary
 
-- Keep this repository limited to the public source-available OpenCore product baseline.
-- Do not add closed-source ranking logic, enterprise encrypted dictionary payloads, private SLM models, customer assets, credentials, or commercial installer secrets.
+- Keep this repository limited to the public GPLv3 product baseline.
+- Do not add closed-source ranking logic, enterprise encrypted dictionary payloads, private SLM models, customer assets, credentials, or installer secrets.
 - Do not mention private repository names, private GitHub organizations, or local machine paths in tracked files.
-- Generic commercial or proprietary boundaries may be described without exposing private repository locations.
-- Use "source-available" rather than "open source" when describing the license model.
-- Personal non-commercial modification and sharing must follow `LICENSE`; company use and all other commercial use require a separate written license from LocalPro Co., Ltd.
+- Generic product boundaries may be described without exposing private repository locations.
+- Describe the software as free and open-source software under GNU GPLv3.
+- Do not add license terms that restrict use, modification, or redistribution beyond GPLv3.
 - Third-party materials remain governed by their own notices and licenses.
 
 ## Handoff Order
