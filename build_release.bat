@@ -61,6 +61,13 @@ if errorlevel 1 (
     exit /b 1
 )
 
+copy /y "%ROOT_DIR%LICENSE_ja.txt" "%TSF_BUILD_DIR%\Release\LICENSE_ja.txt" >nul
+copy /y "%ROOT_DIR%LICENSE_en.txt" "%TSF_BUILD_DIR%\Release\LICENSE_en.txt" >nul
+if errorlevel 1 (
+    echo Copying license files for smoke tests failed.
+    exit /b 1
+)
+
 echo Running TSF activation smoke test...
 "%TSF_BUILD_DIR%\Release\keyro_tsf_activation_smoke.exe"
 if !ERRORLEVEL! NEQ 0 (

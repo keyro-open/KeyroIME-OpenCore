@@ -2,7 +2,7 @@
 
 Type Japanese without breaking your flow.
 
-KeyroIME OpenCore is a local-first, source-available Japanese input method editor for Windows x64. It keeps kana/kanji conversion, katakana loanwords, half-width numbers and symbols, English input, and JIS/ANSI keyboard switching close to the keys your fingers already know.
+KeyroIME OpenCore is a local-first, free and open-source Japanese input method editor for Windows x64, released under GNU GPLv3. It keeps kana/kanji conversion, katakana loanwords, half-width numbers and symbols, English input, and JIS/ANSI keyboard switching close to the keys your fingers already know.
 
 Japanese writing rarely stays in one character set. A single email or technical note may contain names, dates, prices, model numbers, URLs, commands, and English terminology. KeyroIME brings those transitions into one continuous workflow so you can spend less time correcting modes and more time finishing the sentence.
 
@@ -29,10 +29,10 @@ Designed for everyday mixed input:
 
 KeyroIME is intended for business documents, software development, technical writing, and international workplaces where Japanese and US keyboard environments coexist. Dictionary lookup and candidate generation stay on the Windows PC, while the TSF layer retains local romaji-to-kana fallback when the service is unavailable.
 
-This repository intentionally excludes build outputs, release binaries, logs, local paths, credentials, generated caches, closed-source commercial logic, private models, customer assets, and commercial installer secrets.
+This repository intentionally excludes build outputs, release binaries, logs, local paths, credentials, generated caches, closed-source product logic, private models, customer assets, and installer secrets.
 
-KeyroIME OpenCore permits personal non-commercial use, modification, and sharing. Shared versions must provide complete source code under the same license, retain notices, identify LocalPro and the original project, and describe modifications. Company use and all other commercial use require a separate written license from LocalPro Co., Ltd.
+KeyroIME OpenCore is free software under GNU GPLv3. You may use, study, modify, and redistribute it under the terms of that license. Modified versions must retain the required notices and provide the corresponding source as required by GPLv3.
 
 Repository handoff: see [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md) and [doc](doc).
 
-OpenCore license: KeyroIME OpenCore Non-Commercial Source License 1.0. See [LICENSE](LICENSE). Release packages also include [LICENSE_ja.txt](LICENSE_ja.txt) and [LICENSE_en.txt](LICENSE_en.txt). Third-party dictionary notices: see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+OpenCore license: GNU General Public License version 3. See [LICENSE](LICENSE). Release packages also include [LICENSE_ja.txt](LICENSE_ja.txt) and [LICENSE_en.txt](LICENSE_en.txt). Third-party dictionary notices: see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

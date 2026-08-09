@@ -4,22 +4,21 @@
 
 ## 目的と公開範囲
 
-KeyroIME OpenCore は、Windows x64 向け日本語 IME「KeyroIME」の個人・非商用向けソース公開基準です。TSF シェル、ローカル辞書サービス、通知領域プロセス、公開辞書サンプル、ビルド・検証ツール、公開文書を含みます。
+KeyroIME OpenCore は、GNU GPLv3 に基づく Windows x64 向け日本語 IME「KeyroIME」の自由なオープンソース基準です。TSF シェル、ローカル辞書サービス、通知領域プロセス、公開辞書サンプル、ビルド・検証ツール、公開文書を含みます。
 
-このリポジトリには、非公開の商用順位付けロジック、企業向け暗号化辞書、非公開 SLM、顧客資産、認証情報、証明書、署名鍵、商用インストーラー秘密情報、ローカルマシン固有パス、非公開組織・リポジトリ情報を入れません。
+このリポジトリには、公開できない順位付けロジック、企業向け暗号化辞書、非公開 SLM、顧客資産、認証情報、証明書、署名鍵、インストーラー秘密情報、ローカルマシン固有パス、非公開組織・リポジトリ情報を入れません。
 
 ## ライセンスモデル
 
-適用ライセンスは `KeyroIME OpenCore Non-Commercial Source License 1.0` です。これは OSI 定義のオープンソースライセンスではありません。
+適用ライセンスは GNU General Public License version 3 (`GPLv3`) です。
 
-- 自然人が自己のために行う非商用利用、調査、改変、共有を許可する。
-- 共有時は、完全な対応ソース、同一ライセンス、LocalPro と元プロジェクトの出典、改変日と改変概要を提供する。
-- 会社、団体、雇用主、顧客、有償サービス、収益活動その他の商用利用には、株式会社LocalProの書面による別途ライセンスが必要。
-- 外部コントリビューションは同ライセンスで公開し、株式会社LocalProに再ライセンスと商業利用を含む非独占的権利を付与する。
+- GPLv3 の条件に従い、利用、調査、改変および共有ができる。
+- 改変版を共有する場合は、GPLv3 が求める対応ソース、著作権表示およびライセンス表示を提供する。
+- 外部コントリビューションは、原則として GPLv3 の条件で公開する。
 - 第三者コード・辞書はそれぞれのライセンスを適用する。
 - 英語正文は `LICENSE` と `LICENSE_en.txt`、日本語訳は `LICENSE_ja.txt`。
 
-公開文書と UI は `source-available` または「ソース公開版」と表現し、`open source` と表現しません。
+公開文書と UI は `free and open-source software` または「自由なオープンソースソフトウェア」と表現します。
 
 ## GitHub とブランチ
 
@@ -172,7 +171,7 @@ Installer は checksum と x64 PE を確認し、service を `LocalService` で�
 利用者向け guided installer:
 
 - output: `KeyroIME_Setup_v<VERSION>.exe`
-- cover: image、install path、copyright、source-available license
+- cover: image、install path、copyright、GPLv3 license
 - presentation: product 1、product 2、advertisement 3、advertisement 4 を各 3 秒表示
 - virtual progress: 100 ms 更新、最低 12 秒、presentation 中は back/next/cancel/close を禁止
 - finish: image、基本操作、tray 起動 option
@@ -212,7 +211,7 @@ Installer は checksum と x64 PE を確認し、service を `LocalService` で�
 1. Current packaging Draft PR の Windows CI、installer artifact、review を完了し、`main` へ merge する。
 2. 専用 VM で install/update/uninstall/`PURGEDATA` と `LocalService` ACL を確認する。
 3. Notepad、Chromium/Electron、AppContainer/UWP の実 host test を継続する。
-4. 非商用 source license を日本法の専門家に最終確認する。
+4. GPLv3 の適用範囲と第三者素材のライセンス表示を最終確認する。
 5. repository 外の code-signing pipeline を整備する。
 6. 旧 commit には廃止済み GPL 文面が含まれる。Public 化前に最終 tree から clean public baseline を作成するか、明示的承認の下で history rewrite を実施する。既存 history をそのまま公開しない。
 7. clean baseline の current tree と全 Git refs を再監査する。

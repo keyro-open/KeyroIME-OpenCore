@@ -1,6 +1,6 @@
 # KeyroIME OpenCore v1.0.6.15
 
-KeyroIME OpenCore は、Windows 向け日本語 IME「KeyroIME」の個人・非商用向けソース公開版です。
+KeyroIME OpenCore は、GNU GPLv3 に基づく Windows 向け日本語 IME「KeyroIME」の自由なオープンソース版です。
 
 リポジトリ:
 
@@ -8,7 +8,7 @@ KeyroIME OpenCore は、Windows 向け日本語 IME「KeyroIME」の個人・非
 https://github.com/keyro-open/KeyroIME-OpenCore.git
 ```
 
-このリポジトリには、非公開の順位付けロジック、企業向け暗号化辞書ペイロード、非公開 SLM モデル、顧客資産、認証情報、商用インストーラー秘密情報を入れません。
+このリポジトリには、公開できない順位付けロジック、企業向け暗号化辞書ペイロード、非公開 SLM モデル、顧客資産、認証情報、インストーラー秘密情報を入れません。
 
 KeyroIME は、Windows x64 向けのローカル優先型日本語入力システムです。日本語を書きながら、数字、記号、英単語、半角文字、日本語配列/US 配列のキーボードを頻繁に行き来するユーザーのために設計しています。
 
@@ -115,6 +115,6 @@ git status --ignored --short
 
 ## ライセンスと第三者表示
 
-KeyroIME OpenCore は、KeyroIME OpenCore 非商用ソースライセンス 1.0 に基づき、個人の非商用利用、改変および共有を許可します。共有する場合は、同じライセンスで完全な対応ソースを提供し、出典、著作権表示および改変内容を明示する必要があります。会社での利用およびその他の商用利用には、株式会社LocalProの書面による別途ライセンスが必要です。`LICENSE` を参照してください。
+KeyroIME OpenCore は GNU GPLv3 に基づく自由ソフトウェアです。ライセンスの条件に従い、利用、調査、改変および共有ができます。改変版を共有する場合は、GPLv3 が求める表示と対応ソースを提供してください。詳細は `LICENSE` と `LICENSE_ja.txt` を参照してください。
 
 辞書アセットにはプロジェクト独自補足と第三者由来リソースが含まれます。詳細は `THIRD_PARTY_NOTICES.md` と `src/keyro_service/assets/dictionary_manifest.json` を参照してください。

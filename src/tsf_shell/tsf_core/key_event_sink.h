@@ -2,9 +2,7 @@
 // Brand Official Website: https://keyro.jp
 //
 // This file is part of KeyroIME (キーロ) OpenCore.
-// It is source-available under the KeyroIME OpenCore Non-Commercial Source
-// License 1.0. See LICENSE. Commercial use requires a separate written license
-// from 株式会社LocalPro.
+// GNU GPLv3に基づいて配布されます。LICENSE（英語正文）を参照してください。
 // key_event_sink.h
 // KeyroIME TSF シェル - キーイベントシンク
 // TSF OnKeyDown/OnKeyUp イベントの捕捉と処理を担当します。

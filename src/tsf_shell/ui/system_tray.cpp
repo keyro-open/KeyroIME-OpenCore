@@ -2,9 +2,7 @@
 // Brand Official Website: https://keyro.jp
 //
 // This file is part of KeyroIME (キーロ) OpenCore.
-// It is source-available under the KeyroIME OpenCore Non-Commercial Source
-// License 1.0. See LICENSE. Commercial use requires a separate written license
-// from 株式会社LocalPro.
+// GNU GPLv3に基づいて配布されます。LICENSE（英語正文）を参照してください。
 // system_tray.cpp
 
 #include "system_tray.h"
@@ -346,7 +344,7 @@ void ShowLicenseWindowFromOwner(HWND owner)
     HWND window = CreateWindowExW(
         WS_EX_APPWINDOW,
         kLicenseWindowClassName,
-        L"KeyroIME OpenCore LICENSE",
+        L"KeyroIME OpenCore GNU GPLv3",
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -489,7 +487,7 @@ void CreateAboutControls(HWND hwnd)
     CreateWindowExW(
         0,
         L"STATIC",
-        L"個人向け非商用ソース公開版の日本語入力ソフトウェアです。\n"
+        L"GNU GPLv3 に基づく自由なオープンソース日本語入力ソフトウェアです。\n"
         L"純 C++17 TSF シェルと Rust 製ローカルコアサービスを基盤に、"
         L"ローカル辞書と、遅延を抑えたプロセス分離アーキテクチャを備えています。\n"
         L"個人利用、検証、開発用途で安心して使える OpenCore 版です。",
@@ -517,8 +515,8 @@ void CreateAboutControls(HWND hwnd)
     CreateClickableLink(
         hwnd,
         kAboutLicenseLinkId,
-        L"ライセンス　<a href=\"keyro://license\">LICENSE を表示</a>",
-        L"ライセンス  LICENSE を表示",
+        L"ライセンス　<a href=\"keyro://license\">GNU GPLv3 を表示</a>",
+        L"ライセンス  GNU GPLv3 を表示",
         hInstance);
     CreateWindowExW(
         0,
@@ -550,7 +548,7 @@ void CreateLicenseControls(HWND hwnd, const std::wstring& text)
     CreateWindowExW(
         0,
         L"STATIC",
-        L"KeyroIME OpenCore LICENSE",
+        L"KeyroIME OpenCore GNU GPLv3",
         WS_CHILD | WS_VISIBLE | SS_LEFT,
         0,
         0,
@@ -563,7 +561,7 @@ void CreateLicenseControls(HWND hwnd, const std::wstring& text)
     CreateWindowExW(
         0,
         L"STATIC",
-        L"著作権、非商用ソースライセンス、商用利用に関する重要な情報です。",
+        L"著作権と GNU GPLv3 の利用条件に関する重要な情報です。",
         WS_CHILD | WS_VISIBLE | SS_LEFT,
         0,
         0,

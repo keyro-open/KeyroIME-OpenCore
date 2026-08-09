@@ -2,9 +2,7 @@
 // Brand Official Website: https://keyro.jp
 //
 // This file is part of KeyroIME (キーロ) OpenCore.
-// It is source-available under the KeyroIME OpenCore Non-Commercial Source
-// License 1.0. See LICENSE. Commercial use requires a separate written license
-// from 株式会社LocalPro.
+// GNU GPLv3に基づいて配布されます。LICENSE（英語正文）を参照してください。
 #include <windows.h>
 
 #include <iostream>
@@ -81,12 +79,18 @@ bool DialogWindowContract(KeyroIME::SystemTray& tray)
     HWND license = FindWindowW(L"KeyroIME_LicenseWindow", nullptr);
     HWND edit = license ? GetDlgItem(license, kLicenseEditId) : nullptr;
     LONG_PTR style = edit ? GetWindowLongPtrW(edit, GWL_STYLE) : 0;
+    wchar_t licenseText[4096] = {};
+    if (edit) {
+        GetWindowTextW(edit, licenseText, ARRAYSIZE(licenseText));
+    }
     bool licenseOk = edit &&
         (style & ES_MULTILINE) &&
         (style & ES_READONLY) &&
         (style & WS_VSCROLL) &&
         !(style & WS_HSCROLL) &&
-        !(style & ES_AUTOHSCROLL);
+        !(style & ES_AUTOHSCROLL) &&
+        std::wstring(licenseText).find(L"GNU 一般公衆利用許諾書") != std::wstring::npos &&
+        std::wstring(licenseText).find(L"GPL") != std::wstring::npos;
     if (license) {
         DestroyWindow(license);
         PumpMessagesFor(50);

@@ -1,6 +1,6 @@
 # KeyroIME OpenCore v1.0.6.15
 
-KeyroIME OpenCore is the source-available, non-commercial community baseline for the KeyroIME Windows Japanese IME.
+KeyroIME OpenCore is the free and open-source community baseline for the KeyroIME Windows Japanese IME, released under GNU GPLv3.
 
 Repository:
 
@@ -8,7 +8,7 @@ Repository:
 https://github.com/keyro-open/KeyroIME-OpenCore.git
 ```
 
-Do not add closed-source ranking logic, encrypted enterprise dictionary payloads, private SLM models, customer assets, credentials, or commercial installer secrets to this repository.
+Do not add closed-source ranking logic, encrypted enterprise dictionary payloads, private SLM models, customer assets, credentials, or installer secrets to this repository.
 
 KeyroIME is a local-first Japanese input method editor for Windows x64. It is designed for people who write Japanese while constantly touching numbers, symbols, English words, half-width text, and both Japanese and US keyboards.
 
@@ -115,6 +115,6 @@ git status --ignored --short
 
 ## License and Third-Party Notices
 
-KeyroIME OpenCore permits personal non-commercial use, modification, and sharing under the KeyroIME OpenCore Non-Commercial Source License 1.0. Shared versions must provide complete source code under the same license, retain attribution and notices, and identify modifications. Company use and all other commercial use require a separate written license from LocalPro Co., Ltd. See `LICENSE`.
+KeyroIME OpenCore is free software under GNU GPLv3. You may use, study, modify, and share it under the terms of that license. Modified versions must retain notices and provide the corresponding source required by GPLv3. See `LICENSE`.
 
 Dictionary assets include project-authored supplements and third-party-derived resources. See `THIRD_PARTY_NOTICES.md` and `src/keyro_service/assets/dictionary_manifest.json`.
