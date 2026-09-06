@@ -188,6 +188,14 @@ add_executable(keyro_candidate_tag_smoke
     ui/candidate_tag.h
 )
 
+add_executable(keyro_input_key_policy_smoke
+    input_key_policy_smoke.cpp
+    tsf_core/input_key_policy.h
+)
+if(MSVC)
+    target_compile_options(keyro_input_key_policy_smoke PRIVATE /utf-8)
+endif()
+
 # 旧 PoC コンソールプログラムを追加します。
 add_executable(poc_console
     main.cpp
@@ -254,6 +262,10 @@ if(WIN32)
     )
 
     set_target_properties(keyro_candidate_tag_smoke PROPERTIES
+        WIN32_EXECUTABLE FALSE
+    )
+
+    set_target_properties(keyro_input_key_policy_smoke PROPERTIES
         WIN32_EXECUTABLE FALSE
     )
 

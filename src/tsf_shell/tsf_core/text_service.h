@@ -130,6 +130,7 @@ private:
     bool IsNavigationKey(WPARAM wParam) const;
     bool IsPagePreviousKey(WPARAM wParam) const;
     bool IsPageNextKey(WPARAM wParam) const;
+    bool HasCandidatePages() const;
     void MoveHighlight(int delta);
     void ResetBuffer();
     void HideCandidateWindow();

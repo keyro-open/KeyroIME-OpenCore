@@ -1,6 +1,6 @@
 # KeyroIME OpenCore 技術引き継ぎ
 
-スナップショット: 2026-07-13 (Asia/Tokyo)
+スナップショット: 2026-09-06 (Asia/Tokyo)
 
 ## 目的と公開範囲
 
@@ -107,6 +107,8 @@ Canonical specification: `doc/IPC_PROTOCOL_V1.md`
 - `q` は translation を優先する。
 - `v` は name/place/station を優先する。
 - prefix prediction は middle prediction より上位。
+- 1～2 文字の短いかなは先頭一致を優先し、中間一致を下げる。
+- かなの composition 中は記号を連続入力できる。`,` / `.` は複数候補ページがある場合だけ前後ページ、候補ページがない場合は句読点として確定する。
 - sort tie-break は source、match、base score、surface text の順で安定化する。
 - 人名・地名・駅名は内部種別を維持し、UI 表示時のみ `名` に正規化する。
 - translation UI tag は `訳`。表示 tag は commit text に含めない。
@@ -150,11 +152,11 @@ Version source:
 2. IPC protocol compatibility
 3. Rust release build/test
 4. Visual Studio 2022 x64 CMake build
-5. TSF activation、local fallback、candidate tag、runtime input、tray menu、IPC failover smoke
+5. TSF activation、local fallback、candidate tag、input key policy、runtime input、tray menu、IPC failover smoke
 6. public dictionary manifest preparation
 7. release SHA-256 generation
 
-GitHub Actions は Windows build、55 Rust tests、非対話 smoke、secured service IPC integration を実行します。`Windows Installer Packaging` は pull request、`main`、手動実行、`v*` tag で release build と guided EXE を再生成します。tag は `VERSION` と一致する必要があり、tag build は EXE と SHA-256 を GitHub Release へ公開します。
+GitHub Actions は Windows build、56 Rust tests、非対話 smoke、secured service IPC integration を実行します。`Windows Installer Packaging` は pull request、`main`、手動実行、`v*` tag で release build と guided EXE を再生成します。tag は `VERSION` と一致する必要があり、tag build は EXE と SHA-256 を GitHub Release へ公開します。
 
 Release package:
 
@@ -184,10 +186,10 @@ Installer は checksum と x64 PE を確認し、service を `LocalService` で�
 
 ## 2026-07-13 検証
 
-- Rust release tests: 55 passed、0 failed。
+- Rust release tests: 56 passed、0 failed。
 - Rust format: passed。
 - C++ Release x64: passed。
-- 全 6 smoke: passed。
+- 全 7 smoke: passed。
 - IPC failover: 約 8.19 ms、10 ms 未満。
 - secured service 100 requests: average 約 1.62 ms、p95 約 1.97 ms。
 - 400 ms idle reconnect: average 約 1.02 ms。
@@ -205,6 +207,14 @@ Installer は checksum と x64 PE を確認し、service を `LocalService` で�
 
 - 管理者権限による実 install/update/uninstall/purge。既存の Windows IME と service を変更するため、専用テスト環境で実施する。
 - Authenticode signing。現在の検証用 EXE は未署名。証明書と鍵は repository 外で管理する。
+
+## 2026-09-06 機能更新の検証
+
+- Rust Release tests: 56 passed、0 failed。
+- C++ x64 build: passed。
+- Input key policy smoke: passed。候補複数ページ時の `,` / `.` ページ送り、候補ページなし時の記号入力、Shift 記号の優先を確認。
+- TSF activation、local fallback、candidate tag、runtime input、tray menu、IPC failover smoke: passed。
+- 1～2 文字かなの先頭一致優先テスト: passed。
 
 ## 残存リスクと次の作業
 

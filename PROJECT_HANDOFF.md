@@ -1,6 +1,6 @@
 # KeyroIME OpenCore 引き継ぎ
 
-スナップショット: 2026-07-13 (Asia/Tokyo)
+スナップショット: 2026-09-06 (Asia/Tokyo)
 
 この文書は、次の担当者が最短で作業を再開するための運用スナップショットです。安定した設計情報は `PROJECT_CONTEXT.md`、詳細は `doc/PROJECT_HANDOFF.md` を参照してください。ソースコードと GitHub の最新状態が文書と異なる場合は、ソースコードと GitHub を正とします。
 
@@ -70,13 +70,14 @@ KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版で
 
 ## 2026-07-13 検証結果
 
-- Rust Release tests: 55 passed、0 failed。
+- Rust Release tests: 56 passed、0 failed。
 - Rust formatting: 成功。
 - IPC C++/Rust 定数互換検査: 成功。
 - Release x64 build: 成功。
 - TSF activation smoke: 成功。
 - Local fallback smoke: 成功。
 - Candidate tag smoke: 成功。
+- Input key policy smoke: 成功。
 - Runtime input smoke: 成功。
 - Tray menu smoke: 成功。
 - IPC failover smoke: 約 8.19 ms、目標 10 ms 未満。
@@ -131,3 +132,10 @@ KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版で
 - `release/`、`dist/`、`target/`、`build/`、バイナリ、ログ、証明書、認証情報を Git に追加しない。
 - push 前にリモートを読み取り確認し、`git status --short --branch` と `git diff --check` を実行する。
 - TSF DLL 更新後は Explorer/CTF を再起動するか、サインアウト・サインインして旧 DLL のマッピングを解放する。
+
+## 2026-09-06 機能更新
+
+- かなの composition 中に、全角・半角の記号と日本語かなを連続入力できる。
+- `,` / `.` は複数候補ページがある場合だけ前後ページとして消費し、候補ページがない場合は句読点として確定する。
+- 1～2 文字の短いかなは読みの先頭一致を優先し、中間一致を下げる。
+- Rust 56 tests、C++ 7 smoke tests および Release build を確認済み。

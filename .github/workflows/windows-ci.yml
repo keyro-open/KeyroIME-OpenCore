@@ -66,7 +66,8 @@ jobs:
           cmake --build src/tsf_shell/build --config Release --target
           KeyroIME keyro_tray keyro_tray_menu_smoke keyro_runtime_input_smoke
           keyro_ipc_bench keyro_ipc_failover_smoke keyro_tsf_activation_smoke
-          keyro_local_fallback_smoke keyro_candidate_tag_smoke tsf_core
+          keyro_local_fallback_smoke keyro_candidate_tag_smoke
+          keyro_input_key_policy_smoke tsf_core
 
       - name: Run non-interactive smoke tests
         shell: pwsh
@@ -74,6 +75,7 @@ jobs:
           src/tsf_shell/build/Release/keyro_tsf_activation_smoke.exe
           src/tsf_shell/build/Release/keyro_local_fallback_smoke.exe
           src/tsf_shell/build/Release/keyro_candidate_tag_smoke.exe
+          src/tsf_shell/build/Release/keyro_input_key_policy_smoke.exe
           src/tsf_shell/build/Release/keyro_ipc_failover_smoke.exe
 
       - name: Run secured IPC service integration
