@@ -3,7 +3,7 @@ chcp 65001 >nul
 setlocal EnableExtensions EnableDelayedExpansion
 
 set "ROOT_DIR=%~dp0"
-set "PRODUCT_VERSION=1.0.6.15"
+set "PRODUCT_VERSION=1.0.6.16"
 if exist "%ROOT_DIR%VERSION" set /p PRODUCT_VERSION=<"%ROOT_DIR%VERSION"
 set "RELEASE_DIR=%ROOT_DIR%release"
 set "TSF_BUILD_DIR=%ROOT_DIR%src\tsf_shell\build"
@@ -55,7 +55,7 @@ if errorlevel 1 (
 )
 
 echo Building the TSF shell and smoke tests...
-cmake --build "%TSF_BUILD_DIR%" --config Release --target KeyroIME keyro_tray keyro_tray_menu_smoke keyro_runtime_input_smoke keyro_ipc_bench keyro_ipc_failover_smoke keyro_tsf_activation_smoke keyro_local_fallback_smoke keyro_candidate_tag_smoke tsf_core
+cmake --build "%TSF_BUILD_DIR%" --config Release --target KeyroIME keyro_tray keyro_tray_menu_smoke keyro_runtime_input_smoke keyro_ipc_bench keyro_ipc_failover_smoke keyro_tsf_activation_smoke keyro_local_fallback_smoke keyro_candidate_tag_smoke keyro_input_key_policy_smoke tsf_core
 if errorlevel 1 (
     echo TSF shell build failed.
     exit /b 1
@@ -86,6 +86,13 @@ echo Running candidate tag smoke test...
 "%TSF_BUILD_DIR%\Release\keyro_candidate_tag_smoke.exe"
 if !ERRORLEVEL! NEQ 0 (
     echo Candidate tag smoke test failed with exit code !ERRORLEVEL!.
+    exit /b 1
+)
+
+echo Running input key policy smoke test...
+"%TSF_BUILD_DIR%\Release\keyro_input_key_policy_smoke.exe"
+if !ERRORLEVEL! NEQ 0 (
+    echo Input key policy smoke test failed with exit code !ERRORLEVEL!.
     exit /b 1
 )
 

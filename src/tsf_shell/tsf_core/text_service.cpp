@@ -9,6 +9,7 @@
 
 #include "local_romaji.h"
 #include "module_path.h"
+#include "input_key_policy.h"
 #include "../ui/candidate_window.h"
 
 #include <algorithm>
@@ -1098,12 +1099,27 @@ bool KeyroTextService::IsHandledKey(WPARAM wParam, LPARAM lParam) const
         return true;
     }
 
-    if (IsDirectPrintableKey(wParam) &&
-        (CurrentInputSettings().inputMode == SharedInputMode::English ||
-         m_inputBuffer.empty() ||
-         m_shiftTracking ||
-         (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0 ||
-         (wParam >= L'1' && wParam <= L'5'))) {
+    if (IsDirectPrintableKey(wParam)) {
+        bool shiftPressed = m_shiftTracking ||
+            (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+        InputSettingsSnapshot settings = CurrentInputSettings();
+        if (settings.inputMode == SharedInputMode::English ||
+            m_inputBuffer.empty() ||
+            shiftPressed ||
+            (wParam >= L'1' && wParam <= L'5')) {
+            return true;
+        }
+
+        // 句読点キーは、複数ページの候補がある場合だけページ送りに予約します。
+        // それ以外の記号キーは、かなと連続して直接コミットします。
+        if (wParam == VK_OEM_COMMA || wParam == VK_OEM_PERIOD) {
+            return true;
+        }
+
+        // 数字 6～0 は従来どおり IME の候補選択対象にしません。
+        if (wParam >= L'0' && wParam <= L'9') {
+            return false;
+        }
         return true;
     }
 
@@ -1291,12 +1307,23 @@ bool KeyroTextService::IsNavigationKey(WPARAM wParam) const
 
 bool KeyroTextService::IsPagePreviousKey(WPARAM wParam) const
 {
-    return wParam == VK_PRIOR || wParam == VK_OEM_COMMA;
+    bool shiftPressed = m_shiftTracking ||
+        (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+    return ResolvePunctuationKeyAction(wParam, shiftPressed, HasCandidatePages()) ==
+        PunctuationKeyAction::PagePrevious;
 }
 
 bool KeyroTextService::IsPageNextKey(WPARAM wParam) const
 {
-    return wParam == VK_NEXT || wParam == VK_OEM_PERIOD;
+    bool shiftPressed = m_shiftTracking ||
+        (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+    return ResolvePunctuationKeyAction(wParam, shiftPressed, HasCandidatePages()) ==
+        PunctuationKeyAction::PageNext;
+}
+
+bool KeyroTextService::HasCandidatePages() const
+{
+    return m_totalPages > 1 && !m_currentCandidates.empty();
 }
 
 void KeyroTextService::MoveHighlight(int delta)

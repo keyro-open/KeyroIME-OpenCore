@@ -584,6 +584,16 @@ int wmain()
     bool japaneseSymbolReady = sent && WaitForWindowText(edit, L"！", 2500);
     std::wstring afterJapaneseSymbol = WindowText(edit);
 
+    SetWindowTextW(edit, L"");
+    sent = sent && FocusEditWindow(window, edit) && SendLetters(L"a");
+    bool punctuationPagingCandidateReady =
+        sent && WaitForCandidateWindowVisible(true, 2500);
+    sent = sent && SendVirtualKey(VK_OEM_PERIOD);
+    bool punctuationPagingReady = sent &&
+        WaitForCandidateWindowVisible(true, 2500);
+
+    sent = sent && SendVirtualKey(VK_ESCAPE);
+
     KeyroIME::SharedInputSettings settingsRestorer;
     bool settingsRestored = settingsRestorer.Initialize(true) &&
         settingsRestorer.Write(originalSettings);
@@ -616,7 +626,9 @@ int wmain()
                << L" after_full_katakana=" << afterFullKatakana
                << L" after_half_katakana=" << afterHalfKatakana
                << L" after_kana_key=" << afterKanaKey
-               << L" after_japanese_symbol=" << afterJapaneseSymbol << std::endl;
+               << L" after_japanese_symbol=" << afterJapaneseSymbol
+               << L" punctuation_paging_candidate=" << punctuationPagingCandidateReady
+               << L" punctuation_paging=" << punctuationPagingReady << std::endl;
     bool passed = sent && settingsReadable && settingsRestored && menuSelectionPassed && menuOsdVisible &&
         jisTextReady && menuOsdFaded && shortcutSettingsReady && ansiTextReady &&
         menuRestoreReady && restoredTextReady && jisFunctionBaseReady &&
@@ -624,6 +636,7 @@ int wmain()
         hiraganaCompositionReady && fullKatakanaReady && nonConvertFullReady &&
         halfKatakanaReady && nonConvertHalfReady && kanaKeyReady &&
         convertBaseReady && convertCandidateReady && compositionCleared && japaneseSymbolReady &&
+        punctuationPagingCandidateReady && punctuationPagingReady &&
         shortcutOsdVisible && osdFaded &&
         afterShortcutSettings.keyboardLayout == KeyroIME::SharedKeyboardLayout::Ansi &&
         afterMenuSettings.keyboardLayout == KeyroIME::SharedKeyboardLayout::Jis &&
@@ -646,7 +659,9 @@ int wmain()
                    << L" convert_base=" << convertBaseReady
                    << L" convert_candidate=" << convertCandidateReady
                    << L" composition_cleared=" << compositionCleared
-                   << L" japanese_symbol=" << japaneseSymbolReady << std::endl;
+                   << L" japanese_symbol=" << japaneseSymbolReady
+                   << L" punctuation_paging_candidate=" << punctuationPagingCandidateReady
+                   << L" punctuation_paging=" << punctuationPagingReady << std::endl;
         return 6;
     }
     std::wcout << L"registered runtime input smoke passed." << std::endl;

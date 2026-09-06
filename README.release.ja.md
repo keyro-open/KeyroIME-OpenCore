@@ -1,10 +1,10 @@
-# KeyroIME OpenCore v1.0.6.15
+# KeyroIME OpenCore v1.0.6.16
 
 KeyroIME は Windows x64 向けの日本語入力ソフトウェアです。日本語、英語、数字、記号、JIS/ANSI キーボードを混ぜて入力する場面で、切り替え操作を減らすことを重視しています。
 
 ## インストール
 
-1. GitHub Release から `KeyroIME_Setup_v1.0.6.15.exe` をダウンロードします。
+1. GitHub Release から `KeyroIME_Setup_v1.0.6.16.exe` をダウンロードします。
 2. EXE を実行し、Windows の確認画面で許可します。
 3. 案内画面でインストール先とライセンスを確認し、「インストール」を選択します。
 4. インストール後、通知領域に KeyroIME アイコンが表示されます。
@@ -48,4 +48,4 @@ v1.0 はローカル優先です。ログイン、クラウド同期、AI ラン
 
 ## ライセンス
 
-KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版です。ライセンスの条件に従い、利用、改変および共有ができます。改変版を共有する場合は、GPLv3 が求める表示と対応ソースを提供してください。詳細は同梱の `LICENSE_ja.txt` と `LICENSE_en.txt` を参照してください。辞書由来情報は `THIRD_PARTY_NOTICES.md` と `dictionary_manifest.json` に記録しています。
+KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版です。用途を限定せず、ライセンスの条件に従って利用、改変および共有ができます。改変版を共有する場合は、GPLv3 が求める表示と対応ソースを提供してください。詳細は同梱の `LICENSE_ja.txt` と `LICENSE_en.txt` を参照してください。辞書由来情報は `THIRD_PARTY_NOTICES.md` と `dictionary_manifest.json` に記録しています。

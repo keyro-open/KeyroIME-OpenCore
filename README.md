@@ -1,4 +1,4 @@
-# KeyroIME OpenCore v1.0.6.15
+# KeyroIME OpenCore v1.0.6.16
 
 Type Japanese without breaking your flow.
 

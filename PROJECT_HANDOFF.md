@@ -1,6 +1,6 @@
 # KeyroIME OpenCore 引き継ぎ
 
-スナップショット: 2026-07-13 (Asia/Tokyo)
+スナップショット: 2026-09-06 (Asia/Tokyo)
 
 この文書は、次の担当者が最短で作業を再開するための運用スナップショットです。安定した設計情報は `PROJECT_CONTEXT.md`、詳細は `doc/PROJECT_HANDOFF.md` を参照してください。ソースコードと GitHub の最新状態が文書と異なる場合は、ソースコードと GitHub を正とします。
 
@@ -29,7 +29,7 @@
 
 ## ライセンス基準
 
-KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版です。
+KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版です。用途を限定せず、GPLv3 の条件に従って利用、改変および共有できます。
 
 - 適用ライセンス: GNU General Public License version 3 (`GPLv3`)
 - GPLv3 の条件に従い、利用、調査、改変および共有ができる。
@@ -42,8 +42,8 @@ KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版で
 
 ## 製品とセキュリティ基準
 
-- 製品バージョン: `1.0.6.15`。リポジトリルートの `VERSION` を CMake、UI、ビルド、インストーラーの正とする。
-- Rust package version: `1.0.6+15`。
+- 製品バージョン: `1.0.6.16`。リポジトリルートの `VERSION` を CMake、UI、ビルド、インストーラーの正とする。
+- Rust package version: `1.0.6+16`。
 - `KeyroIME.dll`: C++17 TSF/COM テキストサービス。
 - `keyro_service.exe`: Rust 2021 辞書、予測、順位付け、ユーザー頻度、IPC サービス。
 - `keyro_tray.exe`: C++17 通知領域、OSD、About、License UI。
@@ -70,13 +70,14 @@ KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版で
 
 ## 2026-07-13 検証結果
 
-- Rust Release tests: 55 passed、0 failed。
+- Rust Release tests: 56 passed、0 failed。
 - Rust formatting: 成功。
 - IPC C++/Rust 定数互換検査: 成功。
 - Release x64 build: 成功。
 - TSF activation smoke: 成功。
 - Local fallback smoke: 成功。
 - Candidate tag smoke: 成功。
+- Input key policy smoke: 成功。
 - Runtime input smoke: 成功。
 - Tray menu smoke: 成功。
 - IPC failover smoke: 約 8.19 ms、目標 10 ms 未満。
@@ -119,7 +120,7 @@ KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版で
 4. ライセンス正文を日本法の専門家に最終確認する。
 5. コード署名証明書をリポジトリ外で管理し、GitHub Actions の署名工程を追加する。現在の検証用 EXE は未署名。
 6. 旧 commit には廃止済み GPL 文面が含まれるため、Public 変更前に最終 tree から clean public baseline を作成するか、明示的な承認を得て history を rewrite する。現在の history をそのまま Public にしない。
-7. clean baseline に対して現行 tree と Git history を再監査し、`v1.0.6.15` tag を作成する。
+7. clean baseline に対して現行 tree と Git history を再監査し、`v1.0.6.16` tag を作成する。
 8. C++ と Rust の IPC 定数は互換検査で保護済み。将来は必要に応じて単一コード生成へ移行する。
 9. `installer/assets/` の 6 枚の placeholder を正式画像へ差し替える。
 
@@ -131,3 +132,10 @@ KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版で
 - `release/`、`dist/`、`target/`、`build/`、バイナリ、ログ、証明書、認証情報を Git に追加しない。
 - push 前にリモートを読み取り確認し、`git status --short --branch` と `git diff --check` を実行する。
 - TSF DLL 更新後は Explorer/CTF を再起動するか、サインアウト・サインインして旧 DLL のマッピングを解放する。
+
+## 2026-09-06 機能更新
+
+- かなの composition 中に、全角・半角の記号と日本語かなを連続入力できる。
+- `,` / `.` は複数候補ページがある場合だけ前後ページとして消費し、候補ページがない場合は句読点として確定する。
+- 1～2 文字の短いかなは読みの先頭一致を優先し、中間一致を下げる。
+- Rust 56 tests、C++ 7 smoke tests および Release build を確認済み。

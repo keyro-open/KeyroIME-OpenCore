@@ -809,7 +809,8 @@ fn predictive_reading_candidates(index: &PredictiveIndex, query: &str) -> Vec<Di
                 .take(3)
                 .cloned()
                 .map(|mut candidate| {
-                    candidate.score = predictive_score(candidate.score, distance, true);
+                    candidate.score =
+                        predictive_score(candidate.score, distance, true, query_length);
                     candidate.match_kind = CandidateMatch::Prefix;
                     candidate
                 }),
@@ -842,7 +843,8 @@ fn predictive_reading_candidates(index: &PredictiveIndex, query: &str) -> Vec<Di
                     .take(3)
                     .cloned()
                     .map(|mut candidate| {
-                        candidate.score = predictive_score(candidate.score, distance, false);
+                        candidate.score =
+                            predictive_score(candidate.score, distance, false, query_length);
                         candidate.match_kind = CandidateMatch::Middle;
                         candidate
                     }),
@@ -878,13 +880,13 @@ fn predictive_surface_candidates(index: &SurfaceIndex, query: &str) -> Vec<Dicti
         } else if entry.text.starts_with(query) {
             let mut candidate = entry.clone();
             let distance = candidate.text.chars().count().saturating_sub(query_length);
-            candidate.score = predictive_score(candidate.score, distance, true);
+            candidate.score = predictive_score(candidate.score, distance, true, query_length);
             candidate.match_kind = CandidateMatch::Prefix;
             prefix.push(candidate);
         } else if entry.text.contains(query) {
             let mut candidate = entry.clone();
             let distance = candidate.text.chars().count().saturating_sub(query_length);
-            candidate.score = predictive_score(candidate.score, distance, false);
+            candidate.score = predictive_score(candidate.score, distance, false, query_length);
             candidate.match_kind = CandidateMatch::Middle;
             middle.push(candidate);
         }
@@ -898,8 +900,24 @@ fn predictive_surface_candidates(index: &SurfaceIndex, query: &str) -> Vec<Dicti
     prefix
 }
 
-fn predictive_score(original_score: u32, distance: usize, is_prefix: bool) -> u32 {
-    let tier = if is_prefix { 1_600_u32 } else { 1_200_u32 };
+fn predictive_score(
+    original_score: u32,
+    distance: usize,
+    is_prefix: bool,
+    query_length: usize,
+) -> u32 {
+    // 1～2 文字の短いかなは入力意図が曖昧になりやすいため、先頭一致を強く優先します。
+    let tier = if query_length <= 2 {
+        if is_prefix {
+            2_200_u32
+        } else {
+            800_u32
+        }
+    } else if is_prefix {
+        1_600_u32
+    } else {
+        1_200_u32
+    };
     tier.saturating_add(original_score.min(4_000) / 4)
         .saturating_sub((distance as u32).saturating_mul(20).min(300))
 }
@@ -1246,6 +1264,34 @@ mod tests {
         assert!(acknowledgement
             .iter()
             .any(|item| item.text == "承知いたしました"));
+    }
+
+    #[test]
+    fn short_kana_predictive_lookup_strongly_prioritizes_prefix_matches() {
+        let candidates = predictive_candidates_from_index(
+            &static_dictionaries().predictive,
+            "つか",
+            NonKanaPredictiveMode::ReadingKey,
+        );
+        let prefix_score = candidates
+            .iter()
+            .find(|candidate| candidate.text == "使う")
+            .expect("short-kana prefix candidate should exist")
+            .score;
+        let middle_score = candidates
+            .iter()
+            .find(|candidate| candidate.text == "お疲れ様")
+            .expect("short-kana middle candidate should exist")
+            .score;
+        assert!(prefix_score > middle_score);
+        assert!(
+            candidates
+                .iter()
+                .position(|candidate| candidate.text == "使う")
+                < candidates
+                    .iter()
+                    .position(|candidate| candidate.text == "お疲れ様")
+        );
     }
 
     #[test]
