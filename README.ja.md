@@ -1,4 +1,4 @@
-# KeyroIME OpenCore v1.0.6.15
+# KeyroIME OpenCore v1.0.6.16
 
 KeyroIME OpenCore は、GNU GPLv3 に基づく Windows 向け日本語 IME「KeyroIME」の自由なオープンソース版です。
 
@@ -117,6 +117,6 @@ git status --ignored --short
 
 ## ライセンスと第三者表示
 
-KeyroIME OpenCore は GNU GPLv3 に基づく自由ソフトウェアです。ライセンスの条件に従い、利用、調査、改変および共有ができます。改変版を共有する場合は、GPLv3 が求める表示と対応ソースを提供してください。詳細は `LICENSE` と `LICENSE_ja.txt` を参照してください。
+KeyroIME OpenCore は GNU GPLv3 に基づく自由ソフトウェアです。用途を限定せず、ライセンスの条件に従って利用、調査、改変および共有ができます。改変版を共有する場合は、GPLv3 が求める表示と対応ソースを提供してください。詳細は `LICENSE` と `LICENSE_ja.txt` を参照してください。
 
 辞書アセットにはプロジェクト独自補足と第三者由来リソースが含まれます。詳細は `THIRD_PARTY_NOTICES.md` と `src/keyro_service/assets/dictionary_manifest.json` を参照してください。

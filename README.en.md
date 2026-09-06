@@ -1,4 +1,4 @@
-# KeyroIME OpenCore v1.0.6.15
+# KeyroIME OpenCore v1.0.6.16
 
 KeyroIME OpenCore is the free and open-source community baseline for the KeyroIME Windows Japanese IME, released under GNU GPLv3.
 

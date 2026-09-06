@@ -490,7 +490,7 @@ void CreateAboutControls(HWND hwnd)
         L"GNU GPLv3 に基づく自由なオープンソース日本語入力ソフトウェアです。\n"
         L"純 C++17 TSF シェルと Rust 製ローカルコアサービスを基盤に、"
         L"ローカル辞書と、遅延を抑えたプロセス分離アーキテクチャを備えています。\n"
-        L"個人利用、検証、開発用途で安心して使える OpenCore 版です。",
+        L"利用目的を限定しない、GNU GPLv3 に基づく OpenCore 版です。",
         WS_CHILD | WS_VISIBLE | SS_LEFT,
         0,
         0,

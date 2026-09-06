@@ -29,7 +29,7 @@
 
 ## ライセンス基準
 
-KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版です。
+KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版です。用途を限定せず、GPLv3 の条件に従って利用、改変および共有できます。
 
 - 適用ライセンス: GNU General Public License version 3 (`GPLv3`)
 - GPLv3 の条件に従い、利用、調査、改変および共有ができる。
@@ -42,8 +42,8 @@ KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版で
 
 ## 製品とセキュリティ基準
 
-- 製品バージョン: `1.0.6.15`。リポジトリルートの `VERSION` を CMake、UI、ビルド、インストーラーの正とする。
-- Rust package version: `1.0.6+15`。
+- 製品バージョン: `1.0.6.16`。リポジトリルートの `VERSION` を CMake、UI、ビルド、インストーラーの正とする。
+- Rust package version: `1.0.6+16`。
 - `KeyroIME.dll`: C++17 TSF/COM テキストサービス。
 - `keyro_service.exe`: Rust 2021 辞書、予測、順位付け、ユーザー頻度、IPC サービス。
 - `keyro_tray.exe`: C++17 通知領域、OSD、About、License UI。
@@ -120,7 +120,7 @@ KeyroIME OpenCore は GNU GPLv3 に基づく自由なオープンソース版で
 4. ライセンス正文を日本法の専門家に最終確認する。
 5. コード署名証明書をリポジトリ外で管理し、GitHub Actions の署名工程を追加する。現在の検証用 EXE は未署名。
 6. 旧 commit には廃止済み GPL 文面が含まれるため、Public 変更前に最終 tree から clean public baseline を作成するか、明示的な承認を得て history を rewrite する。現在の history をそのまま Public にしない。
-7. clean baseline に対して現行 tree と Git history を再監査し、`v1.0.6.15` tag を作成する。
+7. clean baseline に対して現行 tree と Git history を再監査し、`v1.0.6.16` tag を作成する。
 8. C++ と Rust の IPC 定数は互換検査で保護済み。将来は必要に応じて単一コード生成へ移行する。
 9. `installer/assets/` の 6 枚の placeholder を正式画像へ差し替える。
 

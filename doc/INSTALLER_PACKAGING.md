@@ -12,7 +12,7 @@ GitHub の非対話 runner では Windows TSF profile と tray UI に依存す�
 - `v*` tag: artifact に加えて GitHub Release へ EXE と SHA-256 ファイルを公開
 - 手動実行: `workflow_dispatch` から任意の branch を検証
 
-tag は `v` と `VERSION` の値を連結した文字列と一致する必要があります。例: `VERSION` が `1.0.6.15` の場合、tag は `v1.0.6.15` です。
+	tag は `v` と `VERSION` の値を連結した文字列と一致する必要があります。例: `VERSION` が `1.0.6.16` の場合、tag は `v1.0.6.16` です。
 
 ## 対話式インストール
 
@@ -66,7 +66,7 @@ Visual Studio 2022、Windows SDK、CMake、Rust 1.96.0、Python 3、Inno Setup 6
 ```powershell
 build_release.bat
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/build_installer.ps1
-python tools/check_installer_contract.py --installer dist/KeyroIME_Setup_v1.0.6.15.exe
+python tools/check_installer_contract.py --installer dist/KeyroIME_Setup_v1.0.6.16.exe
 ```
 
 システムを変更せずに画面遷移を確認する場合:

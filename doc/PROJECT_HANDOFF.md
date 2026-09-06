@@ -4,7 +4,7 @@
 
 ## 目的と公開範囲
 
-KeyroIME OpenCore は、GNU GPLv3 に基づく Windows x64 向け日本語 IME「KeyroIME」の自由なオープンソース基準です。TSF シェル、ローカル辞書サービス、通知領域プロセス、公開辞書サンプル、ビルド・検証ツール、公開文書を含みます。
+KeyroIME OpenCore は、GNU GPLv3 に基づく Windows x64 向け日本語 IME「KeyroIME」の自由なオープンソース基準です。用途を限定せず、GPLv3 の条件に従って利用、改変および共有できます。TSF シェル、ローカル辞書サービス、通知領域プロセス、公開辞書サンプル、ビルド・検証ツール、公開文書を含みます。
 
 このリポジトリには、公開できない順位付けロジック、企業向け暗号化辞書、非公開 SLM、顧客資産、認証情報、証明書、署名鍵、インストーラー秘密情報、ローカルマシン固有パス、非公開組織・リポジトリ情報を入れません。
 
@@ -141,8 +141,8 @@ build_release.bat
 
 Version source:
 
-- product: root `VERSION` = `1.0.6.15`
-- Rust SemVer: `1.0.6+15`
+- product: root `VERSION` = `1.0.6.16`
+- Rust SemVer: `1.0.6+16`
 - pinned Rust: `1.96.0`、rustfmt、x86_64-pc-windows-msvc
 - `Cargo.lock`: tracked
 
@@ -225,7 +225,7 @@ Installer は checksum と x64 PE を確認し、service を `LocalService` で�
 5. repository 外の code-signing pipeline を整備する。
 6. 旧 commit には廃止済み GPL 文面が含まれる。Public 化前に最終 tree から clean public baseline を作成するか、明示的承認の下で history rewrite を実施する。既存 history をそのまま公開しない。
 7. clean baseline の current tree と全 Git refs を再監査する。
-8. `v1.0.6.15` release tag と GitHub Release を作成する。
+8. `v1.0.6.16` release tag と GitHub Release を作成する。
 9. `installer/assets/` の placeholder を正式画像へ差し替える。
 
 TSF DLL 更新時は、Explorer/CTF 再起動または sign-out/sign-in により旧 DLL mapping を解放します。

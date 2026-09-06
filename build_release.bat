@@ -3,7 +3,7 @@ chcp 65001 >nul
 setlocal EnableExtensions EnableDelayedExpansion
 
 set "ROOT_DIR=%~dp0"
-set "PRODUCT_VERSION=1.0.6.15"
+set "PRODUCT_VERSION=1.0.6.16"
 if exist "%ROOT_DIR%VERSION" set /p PRODUCT_VERSION=<"%ROOT_DIR%VERSION"
 set "RELEASE_DIR=%ROOT_DIR%release"
 set "TSF_BUILD_DIR=%ROOT_DIR%src\tsf_shell\build"

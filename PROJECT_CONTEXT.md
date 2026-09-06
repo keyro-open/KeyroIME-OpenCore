@@ -154,7 +154,7 @@ build_release.bat
 
 The script builds and tests the Rust service, configures CMake for Visual Studio x64, builds the TSF DLL, tray executable, smoke tests, and release package.
 
-The product version is read from the repository-root `VERSION` file. Rust uses the SemVer-compatible package version `1.0.6+15`, and CMake/UI/release scripts use `1.0.6.15`. The Rust toolchain and `Cargo.lock` are committed for reproducibility. Windows CI builds the products and runs non-interactive smoke tests.
+The product version is read from the repository-root `VERSION` file. Rust uses the SemVer-compatible package version `1.0.6+16`, and CMake/UI/release scripts use `1.0.6.16`. The Rust toolchain and `Cargo.lock` are committed for reproducibility. Windows CI builds the products and runs non-interactive smoke tests.
 
 Useful checks:
 

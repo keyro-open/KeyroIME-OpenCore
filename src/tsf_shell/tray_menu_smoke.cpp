@@ -58,6 +58,7 @@ void PumpMessagesFor(DWORD durationMs)
 bool DialogWindowContract(KeyroIME::SystemTray& tray)
 {
     constexpr int kLicenseEditId = 2001;
+    constexpr int kAboutBodyId = 2103;
     constexpr int kAboutOfficialLinkId = 2104;
     constexpr int kAboutSupportLinkId = 2105;
     constexpr int kAboutLicenseLinkId = 2106;
@@ -65,10 +66,19 @@ bool DialogWindowContract(KeyroIME::SystemTray& tray)
     tray.ShowAboutDialogForTest();
     PumpMessagesFor(100);
     HWND about = FindWindowW(L"KeyroIME_AboutWindow", nullptr);
+    wchar_t aboutBodyText[2048] = {};
+    HWND aboutBody = about ? GetDlgItem(about, kAboutBodyId) : nullptr;
+    if (aboutBody) {
+        GetWindowTextW(aboutBody, aboutBodyText, ARRAYSIZE(aboutBodyText));
+    }
     bool aboutOk = about &&
+        aboutBody &&
         GetDlgItem(about, kAboutOfficialLinkId) &&
         GetDlgItem(about, kAboutSupportLinkId) &&
-        GetDlgItem(about, kAboutLicenseLinkId);
+        GetDlgItem(about, kAboutLicenseLinkId) &&
+        std::wstring(aboutBodyText).find(L"GNU GPLv3") != std::wstring::npos &&
+        std::wstring(aboutBodyText).find(L"利用目的を限定しない") != std::wstring::npos &&
+        std::wstring(aboutBodyText).find(L"個人利用") == std::wstring::npos;
     if (about) {
         DestroyWindow(about);
         PumpMessagesFor(50);

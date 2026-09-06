@@ -1,5 +1,5 @@
 #ifndef MyAppVersion
-  #define MyAppVersion "1.0.6.15"
+  #define MyAppVersion "1.0.6.16"
 #endif
 #ifndef BuildId
   #define BuildId "LOCALBUILD"
