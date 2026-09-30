@@ -24,6 +24,8 @@ jobs:
           fetch-depth: 0
 
       - name: Git 履歴の公開前監査
+        env:
+          PYTHONIOENCODING: utf-8
         run: python tools/audit_public_repository.py
 
       - name: Install pinned Rust toolchain
