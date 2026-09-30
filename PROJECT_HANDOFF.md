@@ -28,11 +28,13 @@
 
 ## 公開前監査（2026-09-30）
 
-基準 commit `3b4c5fe` の時点で、`git fetch origin --prune` 後に `python tools/audit_public_repository.py --github` を実行し、18 commits / 374 blobs、6 PR、21 Actions runs を検査しました。GitHub の 3 件の installer artifact（EXE と SHA-256、計 6 ファイル）も `--artifacts-dir` で検査し、SHA-256 が一致しました。Gitleaks 8.30.1 による全ブランチ履歴と作業ツリーの検査も 0 件でした。定義済みの資格情報、秘密鍵、個人メール、電話番号、個人ディレクトリ、非公開リポジトリ名のパターンに該当する値は検出されませんでした。
+基準 commit `3b4c5fe` の時点で、`git fetch origin --prune` 後に `python tools/audit_public_repository.py --github` を実行し、18 commits / 374 blobs、6 PR、21 Actions runs を検査しました。GitHub の 3 件の installer artifact（EXE と SHA-256、計 6 ファイル）も `--artifacts-dir` で検査し、SHA-256 が一致しました。Gitleaks 8.30.1 による全ブランチ履歴と作業ツリーの検査も 0 件でした。定義済みの資格情報、秘密鍵、未公開の個人メール、電話番号、個人ディレクトリ、非公開リポジトリ名のパターンに該当する値は検出されませんでした。
 
 公開直前の commit `18d52fa` でも 20 commits / 385 blobs、6 PR、25 Actions runs、4 件の installer artifact を再検査し、検出 0 件でした。公開後に GitHub Secret scanning と push protection を有効化し、初回の alert 一覧は 0 件でした。Secret scanning の非同期処理後も継続確認してください。
 
-監査は既知パターンと公開対象の目視確認に基づきます。新しい変更は CI の履歴監査を通し、公開前に再確認します。辞書の人名は製品機能の公開語彙であり、連絡先や顧客レコードは含めません。
+公開後の commit `a4a7416` では 21 commits / 386 blobs、6 PR、27 Actions runs、5 件の installer artifact を再検査しました。定義済みパターンの検出は 0 件で、最新 installer の SHA-256 も一致しました。Windows CI と Installer Packaging は双方成功しました。
+
+監査は既知パターンと公開対象の目視確認に基づきます。新しい変更は CI の履歴監査を通し、公開前に再確認します。辞書の人名は製品機能の公開語彙であり、連絡先や顧客レコードは含めません。会社の公開連絡先と GPL 日本語訳の翻訳者名・公開連絡先は、権利表示として維持します。
 
 ## 検証と配布
 
