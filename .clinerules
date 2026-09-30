@@ -60,3 +60,4 @@ Rules:
 - Do not use destructive Git commands to discard user changes.
 - Before committing, run `git status --short --branch` and `git diff --check`.
 - Before pushing, perform a read-only remote check.
+- 公開・push 前に `python tools/audit_public_repository.py` を実行し、検出値を表示せずに結果を確認する。

@@ -1,38 +1,23 @@
-# KeyroIME OpenCore v1.0.6.16
+# KeyroIME OpenCore
 
-Type Japanese without breaking your flow.
+Windows x64 向け日本語入力システム KeyroIME のオープンソース版です。ローカルで動作する辞書サービスと軽量な TSF シェルを組み合わせ、日本語・英語・数字・記号を続けて入力できます。
 
-KeyroIME OpenCore is a local-first, free and open-source Japanese input method editor for Windows x64, released under GNU GPLv3. It keeps kana/kanji conversion, katakana loanwords, half-width numbers and symbols, English input, and JIS/ANSI keyboard switching close to the keys your fingers already know.
+詳細な README は言語別に用意しています。
 
-Japanese writing rarely stays in one character set. A single email or technical note may contain names, dates, prices, model numbers, URLs, commands, and English terminology. KeyroIME brings those transitions into one continuous workflow so you can spend less time correcting modes and more time finishing the sentence.
+- [日本語 README](README.ja.md)
+- [English README](README.en.md)
 
-Repository:
+## 主な機能
 
-```text
-https://github.com/keyro-open/KeyroIME-OpenCore.git
-```
+- かな漢字変換、カタカナ語、名前・地名、翻訳候補と短いかなの予測。
+- かな入力中の記号入力と、複数候補ページがある場合の `,` / `.` ページ送り。
+- JIS / ANSI キーボード切り替え、半角・全角切り替え、ローカル入力フォールバック。
+- Windows TSF 用 C++17 シェル、Rust 辞書サービス、通知領域 UI。
 
-README:
+## 開発とライセンス
 
-- [日本語](README.ja.md)
-- [English](README.en.md)
+Windows x64、Visual Studio 2022、Windows SDK、CMake、Rust が必要です。ビルド・インストール手順は [日本語 README](README.ja.md) または [English README](README.en.md) を参照してください。
 
-Designed for everyday mixed input:
+本体は [GNU GPLv3](LICENSE) に基づく自由ソフトウェアです。第三者辞書の条件は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) と辞書 manifest に記載しています。
 
-- Continuous Japanese input for Windows users who mix Japanese, numbers, symbols, and English throughout the day.
-- Default half-width input for Japanese/English mixed writing.
-- One-key number and symbol entry without candidate selection or waiting.
-- ANSI/JIS physical keyboard switching for Japanese and US keyboard environments.
-- `CapsLock` English upper/lowercase lock, `Shift+CapsLock` width switching, Shift punctuation switching, `v` names/places/stations, and `q` translation shortcuts.
-- Katakana loanword matching, fuzzy prediction from one kana/kanji, and dynamic candidate concatenation for uncommon names and places.
-- Local-first Windows architecture: C++17 TSF shell, Rust dictionary service, tray UI, and no account, cloud, or AI dependency in v1.0.
-
-KeyroIME is intended for business documents, software development, technical writing, and international workplaces where Japanese and US keyboard environments coexist. Dictionary lookup and candidate generation stay on the Windows PC, while the TSF layer retains local romaji-to-kana fallback when the service is unavailable.
-
-This repository intentionally excludes build outputs, release binaries, logs, local paths, credentials, generated caches, closed-source product logic, private models, customer assets, and installer secrets.
-
-KeyroIME OpenCore is free software under GNU GPLv3. You may use, study, modify, and redistribute it under the terms of that license. Modified versions must retain the required notices and provide the corresponding source as required by GPLv3.
-
-Repository handoff: see [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md) and [doc](doc).
-
-OpenCore license: GNU General Public License version 3. See [LICENSE](LICENSE). Release packages also include [LICENSE_ja.txt](LICENSE_ja.txt) and [LICENSE_en.txt](LICENSE_en.txt). Third-party dictionary notices: see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+セキュリティ上の問題は [SECURITY.md](SECURITY.md) に従って非公開で報告してください。公開前監査の範囲と再実行手順は [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md) に記録しています。

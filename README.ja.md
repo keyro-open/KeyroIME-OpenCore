@@ -1,5 +1,7 @@
 # KeyroIME OpenCore v1.0.6.16
 
+[日本語](README.ja.md) | [English](README.en.md)
+
 KeyroIME OpenCore は、GNU GPLv3 に基づく Windows 向け日本語 IME「KeyroIME」の自由なオープンソース版です。
 
 リポジトリ:
@@ -88,7 +90,7 @@ build_release.bat
 
 ## インストール
 
-利用者向け配布では GitHub Release の `KeyroIME_Setup_v<VERSION>.exe` を実行します。案内画面でインストール先とライセンスを確認してください。インストールには管理者権限が必要です。
+GitHub Release に公開された場合は、`KeyroIME_Setup_v<VERSION>.exe` を実行します。公開済みファイルとハッシュを確認してから使用してください。案内画面でインストール先とライセンスを確認します。インストールには管理者権限が必要です。
 
 開発中の手動検証では次の command も利用できます。
 

@@ -57,6 +57,14 @@ src/keyro_service/assets/*_generated.tsv
 *.key
 *.pfx
 *.p12
+*.p8
+*.ppk
+*.jks
+*.keystore
+*.kdbx
+.ssh/
+id_rsa
+id_ed25519
 credentials*
 secrets*
 .git

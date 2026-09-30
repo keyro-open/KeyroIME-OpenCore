@@ -1,5 +1,7 @@
 # KeyroIME OpenCore v1.0.6.16
 
+[日本語](README.ja.md) | [English](README.en.md)
+
 KeyroIME OpenCore is the free and open-source community baseline for the KeyroIME Windows Japanese IME, released under GNU GPLv3.
 
 Repository:
@@ -86,7 +88,7 @@ Useful validation tools are generated under `src\tsf_shell\build\Release\`, incl
 
 ## Install
 
-For end-user distribution, run `KeyroIME_Setup_v<VERSION>.exe` from the GitHub Release and review the destination and license on the guide page. Installation requires Administrator privileges.
+When a GitHub Release is available, verify the published file and checksum, then run `KeyroIME_Setup_v<VERSION>.exe`. Review the destination and license on the guide page. Installation requires Administrator privileges.
 
 The following command remains available for development-time manual validation:
 
