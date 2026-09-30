@@ -9,6 +9,7 @@
 ## リポジトリとライセンス
 
 - URL: `https://github.com/keyro-open/KeyroIME-OpenCore.git`
+- 公開状態: Public（2026-09-30 に変更）。匿名アクセスで README と LICENSE の HTTP 200 を確認済み。
 - 既定ブランチ: `main`
 - 製品版数: `VERSION` の `1.0.6.16`
 - 本体: [GNU GPLv3](LICENSE)。`LICENSE_en.txt` は英語正文の同一コピー、`LICENSE_ja.txt` は日本語訳。
@@ -27,7 +28,9 @@
 
 ## 公開前監査（2026-09-30）
 
-基準 commit `3b4c5fe` の時点で、`git fetch origin --prune` 後に `python tools/audit_public_repository.py --github` を実行し、18 commits / 374 blobs、6 PR、21 Actions runs を検査しました。GitHub の 3 件の installer artifact（EXE と SHA-256、計 6 ファイル）も `--artifacts-dir` で検査し、SHA-256 が一致しました。Gitleaks 8.30.1 による全ブランチ履歴と作業ツリーの検査も 0 件でした。定義済みの資格情報、秘密鍵、個人メール、電話番号、個人ディレクトリ、非公開リポジトリ名のパターンに該当する値は検出されませんでした。GitHub の Secret scanning は Private 状態では無効でした。公開後に有効状態を再確認してください。
+基準 commit `3b4c5fe` の時点で、`git fetch origin --prune` 後に `python tools/audit_public_repository.py --github` を実行し、18 commits / 374 blobs、6 PR、21 Actions runs を検査しました。GitHub の 3 件の installer artifact（EXE と SHA-256、計 6 ファイル）も `--artifacts-dir` で検査し、SHA-256 が一致しました。Gitleaks 8.30.1 による全ブランチ履歴と作業ツリーの検査も 0 件でした。定義済みの資格情報、秘密鍵、個人メール、電話番号、個人ディレクトリ、非公開リポジトリ名のパターンに該当する値は検出されませんでした。
+
+公開直前の commit `18d52fa` でも 20 commits / 385 blobs、6 PR、25 Actions runs、4 件の installer artifact を再検査し、検出 0 件でした。公開後に GitHub Secret scanning と push protection を有効化し、初回の alert 一覧は 0 件でした。Secret scanning の非同期処理後も継続確認してください。
 
 監査は既知パターンと公開対象の目視確認に基づきます。新しい変更は CI の履歴監査を通し、公開前に再確認します。辞書の人名は製品機能の公開語彙であり、連絡先や顧客レコードは含めません。
 
@@ -43,7 +46,7 @@ Windows Release build と Rust/C++ smoke は `build_release.bat`、installer は
 
 ## 次の作業
 
-1. 公開後の GitHub 可視性、README、CI、Secret scanning / push protection を確認する。
+1. GitHub Secret scanning の非同期結果と新しい PR / Actions を継続確認する。
 2. 専用 Windows VM で管理者 install、update、uninstall、`/PURGEDATA` を確認する。
 3. インストーラーの一時画像を正式画像へ差し替え、署名工程を整備する。
 4. 配布版を作る場合は `VERSION` と tag を一致させ、署名、SHA-256、ライセンス表示を検証する。
